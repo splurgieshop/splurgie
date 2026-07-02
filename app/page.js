@@ -1,0 +1,102 @@
+import Header from "@/components/Header";
+import FeaturedProducts from "@/components/FeaturedProducts";
+import Link from "next/link";
+
+const whySplurgie = [
+  {
+    icon: "🔮",
+    title: "Discover fictional products",
+    description:
+      "Browse a curated feed of impossible, imaginative items from creators around the world.",
+  },
+  {
+    icon: "💸",
+    title: "Shop without spending",
+    description:
+      "Add to cart, checkout, and track your order — all the thrill, zero dollars gone.",
+  },
+  {
+    icon: "🎨",
+    title: "Create & sell your ideas",
+    description:
+      "Every account is a buyer and a seller. List your wildest inventions for the community.",
+  },
+];
+
+export default function Home() {
+  return (
+    <>
+      <Header />
+
+      <section
+        className="flex min-h-[500px] items-center justify-center px-4 py-20 text-center sm:px-6 lg:px-8"
+        style={{
+          background: "linear-gradient(to right, #7C3AED, #EC4899)",
+        }}
+      >
+        <div className="mx-auto max-w-4xl">
+          <h1 className="text-5xl font-bold leading-tight text-white sm:text-6xl">
+            Shop things that don&apos;t exist. Yet.
+          </h1>
+          <p className="mx-auto mt-6 max-w-xl text-xl text-white/80">
+            100% fictional. 100% fun.
+          </p>
+          <Link
+            href="/products"
+            className="mt-10 inline-block rounded-2xl bg-white px-10 py-4 text-base font-bold text-[#7C3AED] shadow-lg transition hover:shadow-xl"
+          >
+            Start Splurging →
+          </Link>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="page-heading text-3xl sm:text-4xl">Why Splurgie?</h2>
+          <p className="mx-auto mt-3 max-w-lg text-slate-500">
+            The dopamine hit of TikTok Shop meets the community vibes of Depop —
+            minus the credit card bill.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-8 sm:grid-cols-3">
+          {whySplurgie.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-2xl bg-white p-8 text-center shadow-md shadow-purple-100/60 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-200/50"
+            >
+              <span className="text-4xl">{item.icon}</span>
+              <h3 className="mt-4 text-lg font-extrabold text-navy">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-gradient-to-b from-purple-50/50 to-white py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="page-heading text-3xl sm:text-4xl">
+                Trending Now
+              </h2>
+              <p className="mt-2 text-slate-500">
+                The hottest fictional finds this week
+              </p>
+            </div>
+            <Link
+              href="/products"
+              className="text-sm font-bold text-primary hover:text-accent"
+            >
+              View all →
+            </Link>
+          </div>
+          <FeaturedProducts />
+        </div>
+      </section>
+    </>
+  );
+}
