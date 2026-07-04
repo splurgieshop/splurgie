@@ -1,4 +1,19 @@
-export default function ProductImage({ product, className = "" }) {
+export default function ProductImage({ product, className = "", alt = "" }) {
+  const imageAlt = alt || product.name || "Product";
+
+  if (product.image_url) {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={product.image_url}
+          alt={imageAlt}
+          className="h-full w-full object-cover"
+        />
+      </div>
+    );
+  }
+
   const overlay = (
     <>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35)_0%,transparent_50%)]" />
