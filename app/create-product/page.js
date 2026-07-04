@@ -168,6 +168,18 @@ export default function CreateProductPage() {
           List a fictional product for the Splurgie community
         </p>
 
+        <div className="mt-6 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5">
+          <span className="mt-0.5 shrink-0 text-lg">⚠️</span>
+          <div>
+            <p className="text-sm font-bold text-amber-800">Community Standards</p>
+            <p className="mt-0.5 text-sm text-amber-700">
+              Keep it clean and fun! Do not upload offensive, adult, violent, or
+              hateful images. All listings are reviewed and violations will be
+              removed without notice.
+            </p>
+          </div>
+        </div>
+
         <form
           onSubmit={handleSubmit}
           className="mt-8 space-y-6 rounded-2xl bg-white p-6 shadow-md shadow-purple-100/50 sm:p-8"
@@ -269,7 +281,7 @@ export default function CreateProductPage() {
               ref={fileInputRef}
               id="product-image"
               type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp"
+              accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
               onChange={handleImageChange}
               className="sr-only"
             />
@@ -309,7 +321,7 @@ export default function CreateProductPage() {
                   Click to upload
                 </p>
                 <p className="mt-1 text-xs text-slate-400">
-                  PNG, JPG or WEBP up to 5MB
+                  JPEG, PNG, GIF or WEBP · Max 5MB
                 </p>
               </label>
             )}

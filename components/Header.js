@@ -54,6 +54,12 @@ export default function Header() {
           >
             Shop
           </Link>
+          <Link
+            href="/about"
+            className="hidden text-sm font-semibold text-navy transition hover:text-[#7C3AED] sm:block"
+          >
+            About
+          </Link>
 
           {!loading && user ? (
             <>
