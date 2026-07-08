@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Header from "@/components/Header";
 import TrackingContent from "@/components/TrackingContent";
 
@@ -14,7 +15,9 @@ export default function TrackingPage() {
         <h1 className="page-heading mb-8 text-center text-3xl sm:text-4xl">
           Track Your Order
         </h1>
-        <TrackingContent />
+        <Suspense fallback={<div className="py-20 text-center text-slate-500">Loading tracking info...</div>}>
+          <TrackingContent />
+        </Suspense>
       </main>
     </>
   );

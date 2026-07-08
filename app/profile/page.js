@@ -8,9 +8,22 @@ import ProductImage from "@/components/ProductImage";
 import ProductCard from "@/components/ProductCard";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { fetchProductsByIds } from "@/lib/fetchProducts";
+import { fetchProductsByIds, fetchProductsBySeller } from "@/lib/fetchProducts";
+import { supabase } from "@/lib/supabase";
+
+async function fetchMyOrders(userId) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+  if (error) return [];
+  return data || [];
+}
 import { formatPrice } from "@/lib/products";
 import { primaryButtonClass } from "@/lib/ui";
+import { getOrderStatus } from "@/lib/orderStatus";
+import EditProfileModal from "@/components/EditProfileModal";
 
 const TABS = ["My Orders", "My Listings", "Wishlist"];
 
@@ -74,18 +87,38 @@ function getMemberSince(user) {
 }
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const { wishlist, removeFromWishlist } = useCart();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("My Orders");
 
   const [wishlistProducts, setWishlistProducts] = useState([]);
+  const [myListings, setMyListings] = useState([]);
+  const [myOrders, setMyOrders] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [profileOverride, setProfileOverride] = useState(null);
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace("/auth/login");
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProductsBySeller(user.id).then(setMyListings).catch(() => {});
+      fetchMyOrders(user.id).then(setMyOrders).catch(() => {});
+    }
+  }, [user]);
+
+  async function handleDelete(productId) {
+    if (!window.confirm("Delete this listing? This cannot be undone.")) return;
+    setDeletingId(productId);
+    await supabase.from("products").delete().eq("id", productId).eq("seller_id", user.id);
+    setMyListings((prev) => prev.filter((p) => p.id !== productId));
+    setDeletingId(null);
+  }
 
   useEffect(() => {
     async function loadWishlist() {
@@ -104,6 +137,10 @@ export default function ProfilePage() {
     loadWishlist();
   }, [wishlist]);
 
+  const displayUsername = profileOverride?.username || getUsername(user);
+  const displayBio = profileOverride?.bio ?? user?.user_metadata?.bio ?? "";
+  const displayLocation = profileOverride?.location ?? user?.user_metadata?.location ?? "";
+
   if (loading || !user) {
     return (
       <>
@@ -118,6 +155,16 @@ export default function ProfilePage() {
   return (
     <>
       <Header />
+      {showEditModal && (
+        <EditProfileModal
+          user={user}
+          onClose={() => setShowEditModal(false)}
+          onSaved={(updated) => {
+            setProfileOverride(updated);
+            setShowEditModal(false);
+          }}
+        />
+      )}
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
         {/* Profile Header */}
         <section className="rounded-2xl bg-white p-8 shadow-md shadow-purple-100/50">
@@ -126,31 +173,45 @@ export default function ProfilePage() {
               {getInitials(user)}
             </div>
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="page-heading text-3xl">@{getUsername(user)}</h1>
-              <p className="mt-1 text-slate-500">
+              <h1 className="page-heading text-3xl">@{displayUsername}</h1>
+              {displayBio && (
+                <p className="mt-1 text-sm text-slate-600">{displayBio}</p>
+              )}
+              <p className="mt-1 text-sm text-slate-400">
+                {displayLocation && <span>📍 {displayLocation} · </span>}
                 Splurgie member since {getMemberSince(user)}
               </p>
               <div className="mt-6 flex justify-center gap-8 sm:justify-start">
                 <div className="text-center">
-                  <p className="text-2xl font-extrabold text-primary">12</p>
+                  <p className="text-2xl font-extrabold text-primary">{myOrders.length}</p>
                   <p className="text-sm text-slate-500">Orders</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-extrabold text-primary">3</p>
+                  <p className="text-2xl font-extrabold text-primary">{myListings.length}</p>
                   <p className="text-sm text-slate-500">Listings</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-extrabold text-primary">8</p>
+                  <p className="text-2xl font-extrabold text-primary">{wishlist.length}</p>
                   <p className="text-sm text-slate-500">Wishlisted</p>
                 </div>
               </div>
             </div>
-            <button
-              type="button"
-              className="rounded-xl border-2 border-purple-200 px-6 py-2.5 text-sm font-bold text-primary transition hover:border-purple-400 hover:bg-purple-50"
-            >
-              Edit Profile
-            </button>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => setShowEditModal(true)}
+                className="rounded-xl border-2 border-purple-200 px-6 py-2.5 text-sm font-bold text-primary transition hover:border-purple-400 hover:bg-purple-50"
+              >
+                Edit Profile
+              </button>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="rounded-xl border-2 border-slate-200 px-6 py-2.5 text-sm font-bold text-slate-500 transition hover:border-slate-400 hover:bg-slate-50"
+              >
+                Sign Out
+              </button>
+            </div>
           </div>
         </section>
 
@@ -178,32 +239,51 @@ export default function ProfilePage() {
         <div className="mt-8">
           {activeTab === "My Orders" && (
             <div className="space-y-4">
-              {fakeOrders.map((order) => (
+              {myOrders.length === 0 ? (
+                <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 py-16 text-center">
+                  <span className="text-5xl">🛍️</span>
+                  <p className="mt-4 font-bold text-navy">No orders yet</p>
+                  <p className="mt-2 text-sm text-slate-500">Go splurge on something!</p>
+                  <Link href="/products" className={`${primaryButtonClass} mt-6 inline-block rounded-xl px-8 py-3 text-sm`}>
+                    Browse Products
+                  </Link>
+                </div>
+              ) : myOrders.map((order) => {
+                const firstItem = order.items?.[0];
+                const itemCount = order.items?.reduce((s, i) => s + i.quantity, 0) || 0;
+                const dateLabel = new Date(order.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+                return (
                   <article
-                    key={order.orderNumber}
+                    key={order.id}
                     className="flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-md shadow-purple-100/50 sm:flex-row sm:items-center"
                   >
                     <ProductImage
-                      product={order}
+                      product={firstItem || { gradient: "linear-gradient(135deg,#7c3aed,#ec4899)" }}
                       className="h-24 w-24 shrink-0 rounded-xl"
                     />
                     <div className="flex-1">
-                      <h3 className="font-bold text-navy">{order.name}</h3>
+                      <h3 className="font-bold text-navy">
+                        {firstItem?.name}{itemCount > 1 ? ` + ${itemCount - 1} more` : ""}
+                      </h3>
                       <p className="mt-1 text-sm text-slate-500">
-                        Order #{order.orderNumber} · {order.dateLabel}
+                        Order #{order.order_number} · {dateLabel}
                       </p>
                       <p className="mt-1 text-lg font-extrabold text-primary">
-                        {formatPrice(order.price)}
+                        {formatPrice(order.total)}
                       </p>
+                      <span className="mt-1 inline-block rounded-full bg-purple-100 px-2 py-0.5 text-xs font-bold text-primary">
+                        {getOrderStatus(order.created_at)}
+                      </span>
                     </div>
                     <Link
-                      href="/tracking"
+                      href={`/tracking?tracking=${encodeURIComponent(order.tracking_number)}&created=${encodeURIComponent(order.created_at)}&origin=${encodeURIComponent(order.items?.[0]?.location || "")}`}
                       className={`${primaryButtonClass} shrink-0 rounded-xl px-6 py-2.5 text-sm`}
                     >
                       View Tracking
                     </Link>
                   </article>
-                ))}
+                );
+              })}
             </div>
           )}
 
@@ -215,42 +295,47 @@ export default function ProfilePage() {
               >
                 Create New Listing +
               </Link>
+              {myListings.length === 0 ? (
+                <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 py-16 text-center">
+                  <span className="text-5xl">🛍️</span>
+                  <p className="mt-4 font-bold text-navy">No listings yet</p>
+                  <p className="mt-2 text-sm text-slate-500">Create your first fictional product!</p>
+                </div>
+              ) : (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {fakeListings.map((listing) => (
+                {myListings.map((listing) => (
                   <article
                     key={listing.id}
                     className="overflow-hidden rounded-2xl bg-white shadow-md shadow-purple-100/50"
                   >
-                    <ProductImage
-                      product={listing}
-                      className="aspect-video"
-                    />
+                    <ProductImage product={listing} className="aspect-video" />
                     <div className="p-4">
                       <h3 className="font-bold text-navy">{listing.name}</h3>
                       <p className="mt-1 text-xl font-extrabold text-primary">
                         {formatPrice(listing.price)}
                       </p>
-                      <p className="mt-1 text-sm text-slate-500">
-                        {listing.sales} sales
-                      </p>
+                      <p className="mt-1 text-sm text-slate-400">{listing.category}</p>
                       <div className="mt-4 flex gap-2">
-                        <button
-                          type="button"
-                          className="flex-1 rounded-xl border-2 border-purple-200 py-2 text-sm font-bold text-primary transition hover:bg-purple-50"
+                        <Link
+                          href={`/edit-product/${listing.id}`}
+                          className="flex-1 rounded-xl border-2 border-purple-200 py-2 text-center text-sm font-bold text-primary transition hover:bg-purple-50"
                         >
                           Edit
-                        </button>
+                        </Link>
                         <button
                           type="button"
-                          className="flex-1 rounded-xl border-2 border-red-200 py-2 text-sm font-bold text-red-500 transition hover:bg-red-50"
+                          onClick={() => handleDelete(listing.id)}
+                          disabled={deletingId === listing.id}
+                          className="flex-1 rounded-xl border-2 border-red-200 py-2 text-sm font-bold text-red-500 transition hover:bg-red-50 disabled:opacity-50"
                         >
-                          Delete
+                          {deletingId === listing.id ? "Deleting…" : "Delete"}
                         </button>
                       </div>
                     </div>
                   </article>
                 ))}
               </div>
+              )}
             </div>
           )}
 

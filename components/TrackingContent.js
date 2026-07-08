@@ -2,35 +2,41 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-
-const stages = [
-  { key: "placed", label: "Order Placed" },
-  { key: "processing", label: "Processing" },
-  { key: "shipped", label: "Shipped" },
-  { key: "out", label: "Out for Delivery" },
-  { key: "delivered", label: "Delivered" },
-];
-
-const CURRENT_STAGE = 2;
-
-function getDeliveryDate() {
-  const days = 6;
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+import { useSearchParams } from "next/navigation";
+import { ORDER_STAGES, getOrderStageIndex } from "@/lib/orderStatus";
 
 export default function TrackingContent() {
+  const params = useSearchParams();
+
   const trackingNumber = useMemo(
-    () => `SPG${Math.random().toString(36).substring(2, 12).toUpperCase()}`,
+    () => params.get("tracking") || `SPG${Math.random().toString(36).substring(2, 12).toUpperCase()}`,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-  const deliveryDate = useMemo(() => getDeliveryDate(), []);
+
+  const createdAt = params.get("created") || null;
+  const origin = params.get("origin") || null;
+
+  const currentStage = getOrderStageIndex(createdAt);
+
+  const deliveryDate = useMemo(() => {
+    const base = createdAt ? new Date(createdAt) : new Date();
+    base.setDate(base.getDate() + 6);
+    return base.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }, [createdAt]);
+
+  const lastUpdate = useMemo(() => {
+    if (currentStage === 1) return "Order received and being prepared for shipment";
+    if (currentStage === 2) return "Package departed Splurgie Fulfillment Center";
+    if (currentStage === 3) return "Package out for delivery in your area";
+    if (currentStage >= 4) return "Package delivered to your address";
+    return "Order placed successfully";
+  }, [currentStage]);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -54,29 +60,29 @@ export default function TrackingContent() {
               <div
                 className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all"
                 style={{
-                  width: `${(CURRENT_STAGE / (stages.length - 1)) * 100}%`,
+                  width: `${(currentStage / (ORDER_STAGES.length - 1)) * 100}%`,
                 }}
               />
             </div>
-            {stages.map((stage, index) => (
+            {ORDER_STAGES.map((stage, index) => (
               <div
                 key={stage.key}
                 className="relative flex flex-col items-center"
               >
                 <div
                   className={`z-10 flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
-                    index <= CURRENT_STAGE
+                    index <= currentStage
                       ? "bg-gradient-to-r from-primary to-accent text-white shadow-md"
                       : "border-2 border-purple-100 bg-white text-slate-400"
                   }`}
                 >
-                  {index <= CURRENT_STAGE ? "✓" : index + 1}
+                  {index <= currentStage ? "✓" : index + 1}
                 </div>
                 <span
                   className={`mt-2 hidden text-center text-xs sm:block ${
-                    index === CURRENT_STAGE
+                    index === currentStage
                       ? "font-extrabold text-primary"
-                      : index < CURRENT_STAGE
+                      : index < currentStage
                         ? "font-medium text-navy"
                         : "text-slate-400"
                   }`}
@@ -87,7 +93,7 @@ export default function TrackingContent() {
             ))}
           </div>
           <p className="mt-6 text-center text-sm font-extrabold text-primary sm:hidden">
-            Current status: {stages[CURRENT_STAGE].label}
+            Current status: {ORDER_STAGES[currentStage].label}
           </p>
         </div>
 
@@ -95,7 +101,7 @@ export default function TrackingContent() {
           <div className="flex justify-between text-sm">
             <span className="text-slate-500">Status</span>
             <span className="rounded-full bg-purple-100 px-3 py-0.5 text-xs font-extrabold text-primary">
-              {stages[CURRENT_STAGE].label}
+              {ORDER_STAGES[currentStage].label}
             </span>
           </div>
           <div className="flex justify-between text-sm">
@@ -104,14 +110,12 @@ export default function TrackingContent() {
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-slate-500">Last Update</span>
-            <span className="max-w-[60%] text-right text-navy">
-              Package departed Splurgie Fulfillment Center, Dreamville
-            </span>
+            <span className="max-w-[60%] text-right text-navy">{lastUpdate}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-slate-500">Origin</span>
+            <span className="text-slate-500">Ships From</span>
             <span className="text-navy">
-              Splurgie HQ, Imagination District
+              {origin || "Splurgie HQ, Imagination District"}
             </span>
           </div>
         </div>

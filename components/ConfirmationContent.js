@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { primaryButtonClass } from "@/lib/ui";
 
 function randomDigits(length) {
   let result = "";
-  for (let i = 0; i < length; i++) {
-    result += Math.floor(Math.random() * 10);
-  }
+  for (let i = 0; i < length; i++) result += Math.floor(Math.random() * 10);
   return result;
 }
 
@@ -17,19 +16,17 @@ function getDeliveryDate() {
   const date = new Date();
   date.setDate(date.getDate() + days);
   return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
+    weekday: "long", month: "long", day: "numeric", year: "numeric",
   });
 }
 
 export default function ConfirmationContent() {
-  const orderNumber = useMemo(() => randomDigits(8), []);
-  const trackingNumber = useMemo(
-    () => `SPG${randomDigits(10).toUpperCase()}`,
-    []
-  );
+  const params = useSearchParams();
+  const orderNumber = params.get("order") || useMemo(() => randomDigits(8), []);
+  const trackingNumber = params.get("tracking") || useMemo(() => `SPG${randomDigits(10)}`, []);
+  const total = params.get("total");
+  const created = params.get("created") || new Date().toISOString();
+  const origin = params.get("origin") || "";
   const deliveryDate = useMemo(() => getDeliveryDate(), []);
 
   return (
@@ -58,6 +55,12 @@ export default function ConfirmationContent() {
             {trackingNumber}
           </span>
         </div>
+        {total && (
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-500">Total Paid</span>
+            <span className="font-mono font-extrabold text-primary">${total}</span>
+          </div>
+        )}
         <div className="flex justify-between text-sm">
           <span className="text-slate-500">Estimated Delivery</span>
           <span className="font-bold text-navy">{deliveryDate}</span>
@@ -69,7 +72,7 @@ export default function ConfirmationContent() {
       </p>
 
       <Link
-        href="/tracking"
+        href={`/tracking?tracking=${encodeURIComponent(trackingNumber)}&created=${encodeURIComponent(created)}&origin=${encodeURIComponent(origin)}`}
         className={`${primaryButtonClass} mt-8 inline-block rounded-xl px-8 py-3.5 text-sm`}
       >
         Track My Order

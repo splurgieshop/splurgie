@@ -1,12 +1,37 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 
+const PRICE_OPTIONS = [
+  { value: "all", label: "All Prices" },
+  { value: "under100", label: "Under $100" },
+  { value: "100-300", label: "$100 – $300" },
+  { value: "over300", label: "Over $300" },
+];
+
+const SORT_OPTIONS = [
+  { value: "featured", label: "Featured" },
+  { value: "trending", label: "Trending" },
+  { value: "price-low", label: "Price: Low to High" },
+  { value: "price-high", label: "Price: High to Low" },
+  { value: "name", label: "Name A–Z" },
+];
+
 export default function ProductsGrid({ products = [] }) {
-  const [category, setCategory] = useState("All");
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("q") || "");
+  const [category, setCategory] = useState(searchParams.get("category") || "All");
   const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) setSearch(q);
+    const cat = searchParams.get("category");
+    if (cat) setCategory(cat);
+  }, [searchParams]);
 
   const categories = useMemo(() => {
     const cats = [...new Set(products.map((p) => p.category))].sort();
@@ -15,6 +40,16 @@ export default function ProductsGrid({ products = [] }) {
 
   const filtered = useMemo(() => {
     let result = [...products];
+
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name?.toLowerCase().includes(q) ||
+          p.description?.toLowerCase().includes(q) ||
+          p.category?.toLowerCase().includes(q)
+      );
+    }
 
     if (category !== "All") {
       result = result.filter((p) => p.category === category);
@@ -34,99 +69,105 @@ export default function ProductsGrid({ products = [] }) {
       result.sort((a, b) => b.price - a.price);
     } else if (sortBy === "name") {
       result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === "trending") {
+      result.sort((a, b) => (b.sold_count || 0) - (a.sold_count || 0));
     }
 
     return result;
-  }, [products, category, priceRange, sortBy]);
+  }, [products, category, priceRange, sortBy, search]);
+
+  const hasActiveFilters = category !== "All" || priceRange !== "all" || search.trim();
+
+  function clearFilters() {
+    setCategory("All");
+    setPriceRange("all");
+    setSearch("");
+    setSortBy("featured");
+  }
 
   return (
-    <div className="flex flex-col gap-8 lg:flex-row">
-      <aside className="w-full shrink-0 lg:w-64">
-        <div className="sticky top-24 space-y-6 rounded-2xl bg-white p-6 shadow-md shadow-purple-100/50">
-          <div>
-            <h3 className="mb-3 text-xs font-extrabold uppercase tracking-wider text-primary">
-              Category
-            </h3>
-            <div className="space-y-2">
-              {categories.map((cat) => (
-                <label
-                  key={cat}
-                  className="flex cursor-pointer items-center gap-2 text-sm font-medium text-navy"
-                >
-                  <input
-                    type="radio"
-                    name="category"
-                    checked={category === cat}
-                    onChange={() => setCategory(cat)}
-                    className="accent-primary"
-                  />
-                  {cat}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="mb-3 text-xs font-extrabold uppercase tracking-wider text-primary">
-              Price Range
-            </h3>
-            <div className="space-y-2">
-              {[
-                { value: "all", label: "All Prices" },
-                { value: "under100", label: "Under $100" },
-                { value: "100-300", label: "$100 – $300" },
-                { value: "over300", label: "Over $300" },
-              ].map((opt) => (
-                <label
-                  key={opt.value}
-                  className="flex cursor-pointer items-center gap-2 text-sm font-medium text-navy"
-                >
-                  <input
-                    type="radio"
-                    name="price"
-                    checked={priceRange === opt.value}
-                    onChange={() => setPriceRange(opt.value)}
-                    className="accent-primary"
-                  />
-                  {opt.label}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="mb-3 text-xs font-extrabold uppercase tracking-wider text-primary">
-              Sort By
-            </h3>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="input-field w-full"
-            >
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="name">Name A–Z</option>
-            </select>
-          </div>
+    <div>
+      {/* Filter bar */}
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        {/* Search */}
+        <div className="relative min-w-[180px] flex-1">
+          <svg
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search products..."
+            className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-navy outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
+          />
         </div>
-      </aside>
 
-      <div className="flex-1">
-        <p className="mb-4 text-sm font-semibold text-slate-500">
-          {filtered.length} product{filtered.length !== 1 ? "s" : ""}
-        </p>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} />
+        {/* Category dropdown */}
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-navy outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>{cat === "All" ? "All Categories" : cat}</option>
           ))}
-        </div>
-        {filtered.length === 0 && (
-          <p className="py-12 text-center text-slate-500">
-            No products match your filters.
-          </p>
+        </select>
+
+        {/* Price dropdown */}
+        <select
+          value={priceRange}
+          onChange={(e) => setPriceRange(e.target.value)}
+          className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-navy outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
+        >
+          {PRICE_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+
+        {/* Sort dropdown */}
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold text-navy outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+
+        {/* Clear filters */}
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="rounded-xl border border-purple-200 bg-purple-50 px-3 py-2.5 text-sm font-semibold text-primary transition hover:bg-purple-100"
+          >
+            Clear ✕
+          </button>
         )}
       </div>
+
+      {/* Result count */}
+      <p className="mb-4 text-sm font-semibold text-slate-500">
+        {filtered.length} product{filtered.length !== 1 ? "s" : ""}
+        {category !== "All" && <span className="ml-1 text-primary">in {category}</span>}
+      </p>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        {filtered.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <p className="py-12 text-center text-slate-500">No products match your filters.</p>
+      )}
     </div>
   );
 }

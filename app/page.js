@@ -1,5 +1,7 @@
 import Header from "@/components/Header";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import HeroSearch from "@/components/HeroSearch";
+import CategoriesBar from "@/components/CategoriesBar";
 import Link from "next/link";
 
 const whySplurgie = [
@@ -41,24 +43,20 @@ export default function Home() {
           <p className="mx-auto mt-6 max-w-xl text-xl text-white/80">
             100% fictional. 100% fun.
           </p>
+          <HeroSearch />
           <Link
             href="/products"
-            className="mt-10 inline-block rounded-2xl bg-white px-10 py-4 text-base font-bold text-[#7C3AED] shadow-lg transition hover:shadow-xl"
+            className="mt-4 inline-block text-sm font-semibold text-white/70 transition hover:text-white"
           >
-            Start Splurging →
+            or browse all products →
           </Link>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="page-heading text-3xl sm:text-4xl">Why Splurgie?</h2>
-          <p className="mx-auto mt-3 max-w-lg text-slate-500">
-            The dopamine hit of TikTok Shop meets the community vibes of Depop —
-            minus the credit card bill.
-          </p>
-        </div>
-        <div className="mt-12 grid gap-8 sm:grid-cols-3">
+      <CategoriesBar />
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-8 sm:grid-cols-3">
           {whySplurgie.map((item) => (
             <div
               key={item.title}

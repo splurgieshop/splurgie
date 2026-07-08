@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import ProductImage from "@/components/ProductImage";
-import { formatPrice, getSellerName } from "@/lib/products";
+import { formatPrice, getSellerName, formatSoldCount } from "@/lib/products";
 import { primaryButtonClass } from "@/lib/ui";
 
 export default function ProductCard({ product }) {
@@ -61,12 +61,19 @@ export default function ProductCard({ product }) {
         <p className="mt-1 text-xl font-extrabold text-primary">
           {formatPrice(product.price)}
         </p>
-        <Link
-          href={`/products/${product.id}`}
-          className="mt-1 text-sm font-semibold text-accent hover:underline"
-        >
-          @{getSellerName(product)}
-        </Link>
+        <div className="mt-1 flex items-center gap-2">
+          <Link
+            href={`/seller/${getSellerName(product)}`}
+            className="text-sm font-semibold text-accent hover:underline"
+          >
+            @{getSellerName(product)}
+          </Link>
+          {formatSoldCount(product.sold_count) && (
+            <span className="text-xs font-bold text-slate-400">
+              · {formatSoldCount(product.sold_count)}
+            </span>
+          )}
+        </div>
         <button
           onClick={() => addToCart(product.id)}
           className={`${primaryButtonClass} mt-4 w-full rounded-xl py-2.5 text-sm`}

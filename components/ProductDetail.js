@@ -1,16 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/ProductCard";
 import ProductImage from "@/components/ProductImage";
-import StarRating from "@/components/StarRating";
-import { DEFAULT_REVIEWS, formatPrice, getSellerName } from "@/lib/products";
+import { formatPrice, getSellerName, formatSoldCount } from "@/lib/products";
 import { primaryButtonClass } from "@/lib/ui";
+import ProductReviews from "@/components/ProductReviews";
+import ShareButton from "@/components/ShareButton";
 
 export default function ProductDetail({ product, relatedProducts }) {
   const { addToCart, toggleWishlist, wishlist } = useCart();
   const isWishlisted = wishlist.includes(product.id);
-  const reviews = product.reviews || DEFAULT_REVIEWS;
 
   return (
     <>
@@ -36,9 +37,24 @@ export default function ProductDetail({ product, relatedProducts }) {
           <p className="mt-3 text-3xl font-extrabold text-primary">
             {formatPrice(product.price)}
           </p>
-          <p className="mt-2 text-sm font-bold text-accent">
-            Sold by @{getSellerName(product)}
-          </p>
+          <div className="mt-2 flex items-center gap-3">
+            <Link
+              href={`/seller/${getSellerName(product)}`}
+              className="text-sm font-bold text-accent hover:underline"
+            >
+              Sold by @{getSellerName(product)}
+            </Link>
+            {formatSoldCount(product.sold_count) && (
+              <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-bold text-primary">
+                🔥 {formatSoldCount(product.sold_count)}
+              </span>
+            )}
+          </div>
+          {product.location && (
+            <p className="mt-1 text-sm text-slate-500">
+              📦 Ships from {product.location}
+            </p>
+          )}
           <p className="mt-6 leading-relaxed text-slate-600">
             {product.description}
           </p>
@@ -50,6 +66,7 @@ export default function ProductDetail({ product, relatedProducts }) {
             >
               Add to Cart
             </button>
+            <ShareButton product={product} />
             <button
               onClick={() => toggleWishlist(product.id)}
               className="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-purple-100 bg-white shadow-sm transition hover:border-accent hover:bg-pink-50"
@@ -73,25 +90,7 @@ export default function ProductDetail({ product, relatedProducts }) {
         </div>
       </div>
 
-      <section className="mt-16">
-        <h2 className="page-heading text-2xl">Community Reviews</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {reviews.map((review) => (
-            <div
-              key={review.author}
-              className="rounded-2xl bg-white p-5 shadow-md shadow-purple-100/50"
-            >
-              <StarRating rating={review.rating} />
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                &ldquo;{review.text}&rdquo;
-              </p>
-              <p className="mt-3 text-sm font-bold text-accent">
-                @{review.author}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ProductReviews productId={product.id} />
 
       {relatedProducts.length > 0 && (
         <section className="mt-16">

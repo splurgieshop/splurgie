@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import { fetchRecentProducts } from "@/lib/fetchProducts";
+import { fetchTrendingProducts } from "@/lib/fetchProducts";
 import { primaryButtonClass } from "@/lib/ui";
 
 function LoadingSpinner() {
@@ -21,7 +21,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const data = await fetchRecentProducts(6);
+        const data = await fetchTrendingProducts(6);
         setProducts(data);
       } catch {
         setProducts([]);

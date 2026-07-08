@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Header from "@/components/Header";
 import ProductsPageContent from "@/components/ProductsPageContent";
 
@@ -16,7 +17,9 @@ export default function ProductsPage() {
           Filter, sort, and splurge on things that don&apos;t exist.
         </p>
         <div className="mt-8">
-          <ProductsPageContent />
+          <Suspense fallback={<div className="py-20 text-center text-slate-500">Loading products...</div>}>
+            <ProductsPageContent />
+          </Suspense>
         </div>
       </main>
     </>

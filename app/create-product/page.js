@@ -16,6 +16,10 @@ const CATEGORIES = [
   "Food & Drink",
   "Beauty",
   "Weird & Wonderful",
+  "Toys & Games",
+  "Pets",
+  "Art & Creativity",
+  "Magical",
 ];
 
 export default function CreateProductPage() {
@@ -32,6 +36,7 @@ export default function CreateProductPage() {
     description: "",
     price: "",
     category: CATEGORIES[0],
+    location: "",
   });
 
   useEffect(() => {
@@ -120,6 +125,7 @@ export default function CreateProductPage() {
         gradient:
           CATEGORY_GRADIENTS[form.category] || CATEGORY_GRADIENTS.Fashion,
         image_url: imageUrl,
+        location: form.location || null,
       });
 
       if (insertError) {
@@ -268,6 +274,25 @@ export default function CreateProductPage() {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="location"
+              className="mb-1 block text-sm font-bold text-navy"
+            >
+              Your Location <span className="font-normal text-slate-400">(optional)</span>
+            </label>
+            <input
+              id="location"
+              type="text"
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="e.g. New York, London, Tokyo"
+            />
+            <p className="mt-1 text-xs text-slate-400">Shown as shipping origin on product page</p>
           </div>
 
           <div>
