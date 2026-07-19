@@ -1,23 +1,29 @@
+import { redirect } from "next/navigation";
 import Header from "@/components/Header";
 import ProductDetail from "@/components/ProductDetail";
-import { fetchProductById, fetchRecentProducts } from "@/lib/fetchProducts";
+import { fetchProductBySlug, fetchTrendingProducts } from "@/lib/fetchProducts";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }) {
-  const { id } = await params;
-  const product = await fetchProductById(id);
+  const { slug } = await params;
+  const product = await fetchProductBySlug(slug);
   if (!product) return { title: "Product Not Found — Splurgie" };
   return {
     title: `${product.name} — Splurgie`,
     description: product.description,
+    openGraph: {
+      title: `${product.name} — Splurgie`,
+      description: product.description,
+      url: `https://splurgie.com/products/${product.slug}`,
+    },
   };
 }
 
 export default async function ProductPage({ params }) {
-  const { id } = await params;
-  const product = await fetchProductById(id);
+  const { slug } = await params;
+  const product = await fetchProductBySlug(slug);
 
   if (!product) {
     return (
@@ -40,10 +46,19 @@ export default async function ProductPage({ params }) {
     );
   }
 
-  const recent = await fetchRecentProducts(4);
-  const relatedProducts = recent
-    .filter((p) => p.id !== product.id)
+  // If someone visits the old UUID URL, redirect to the slug URL
+  if (product.slug && slug !== product.slug) {
+    redirect(`/products/${product.slug}`);
+  }
+
+  const trending = await fetchTrendingProducts(4);
+  const relatedProducts = trending
+    .filter((p) => p.id !== product.id && p.category === product.category)
     .slice(0, 3);
+
+  const fallbackRelated = relatedProducts.length < 3
+    ? trending.filter((p) => p.id !== product.id).slice(0, 3 - relatedProducts.length)
+    : [];
 
   return (
     <>
@@ -55,7 +70,10 @@ export default async function ProductPage({ params }) {
         >
           ← Back to products
         </Link>
-        <ProductDetail product={product} relatedProducts={relatedProducts} />
+        <ProductDetail
+          product={product}
+          relatedProducts={[...relatedProducts, ...fallbackRelated].slice(0, 3)}
+        />
       </main>
     </>
   );

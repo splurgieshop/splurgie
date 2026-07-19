@@ -1,12 +1,47 @@
 import Link from "next/link";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "About Splurgie",
+  title: "About Splurgie — The Fictional Shopping Platform",
   description:
-    "Splurgie is a social commerce platform where you browse, buy, and sell entirely fictional products. The joy of shopping — with zero dollars spent.",
+    "Splurgie is a free social commerce platform where you browse, buy, and sell entirely fictional products. The joy of shopping — with zero dollars spent. No credit card needed.",
 };
+
+const FAQ_ITEMS = [
+  {
+    question: "What is Splurgie?",
+    answer:
+      "Splurgie is a free social commerce platform where users browse, 'buy', and sell entirely fictional products. Every item on Splurgie is invented by its community — there are no real brands, no real prices, and no real deliveries. It recreates the full emotional experience of online shopping (browsing, carting, checking out, tracking) purely for fun and creativity.",
+  },
+  {
+    question: "Is Splurgie free? Do I need a credit card?",
+    answer:
+      "Splurgie is completely free. You never need to enter a real credit card or any payment details. When you check out, you can enter any card number — it all goes through because no real transaction ever occurs. Splurgie is a simulated shopping experience for entertainment purposes only.",
+  },
+  {
+    question: "What can you do on Splurgie?",
+    answer: [
+      "Browse thousands of fictional products across 10 categories: Fashion, Tech Gadgets, Home, Food & Drink, Beauty, Weird & Wonderful, Toys & Games, Pets, Art & Creativity, and Magical.",
+      "Add items to a cart and go through a full, realistic checkout flow — no real payment needed.",
+      "Track your fictional order in real time as it moves from Processing → Shipped → Out for Delivery → Delivered.",
+      "Save products to a personal wishlist and come back to them anytime.",
+      "Leave star ratings and written reviews on any product.",
+      "Share products with friends via WhatsApp, Telegram, X, Facebook, or a direct link.",
+      "Create your own listings — every account is a seller account. Upload an image, write a description, set a price, and publish your fictional product idea for the community to discover.",
+      "Track your seller performance in a personal dashboard showing revenue, top products, and sales over time.",
+    ],
+  },
+  {
+    question: "Can anyone sell on Splurgie?",
+    answer:
+      "Yes — every Splurgie account is both a buyer and a seller. Once you sign up, you can immediately create a product listing by giving it a name, description, price, category, and an optional image. Your listing appears on the platform instantly. You can track how many 'sales' your product has received and monitor performance in your personal Seller Dashboard.",
+  },
+  {
+    question: "Is my personal information safe on Splurgie?",
+    answer:
+      "Yes. Splurgie uses secure, industry-standard encryption for account sign-in. We do not collect or store any real payment information — checkout is entirely simulated. We do not share your personal data with third parties. Your account information (username, bio, and location) is used solely to personalise your Splurgie experience.",
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -146,6 +181,45 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* FAQ */}
+        <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+          <h2 className="text-center text-3xl font-extrabold text-[#7C3AED]">
+            Frequently Asked Questions
+          </h2>
+          <p className="mt-3 text-center text-slate-500">
+            Everything you need to know about Splurgie.
+          </p>
+          <div className="mt-10 space-y-4">
+            {FAQ_ITEMS.map(({ question, answer }) => (
+              <details
+                key={question}
+                className="group rounded-2xl border border-purple-100 bg-white shadow-sm shadow-purple-50"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 font-bold text-navy marker:hidden">
+                  {question}
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-50 text-primary transition group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                {Array.isArray(answer) ? (
+                  <ul className="space-y-2 px-6 pb-6">
+                    {answer.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-slate-600">
+                        <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="px-6 pb-6 text-sm leading-relaxed text-slate-600">
+                    {answer}
+                  </p>
+                )}
+              </details>
+            ))}
+          </div>
+        </section>
+
         {/* Disclaimer */}
         <section className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 lg:px-8">
           <p className="text-xs text-slate-400">
@@ -155,7 +229,25 @@ export default function AboutPage() {
           </p>
         </section>
       </main>
-      <Footer />
+
+      {/* JSON-LD FAQ schema for Google rich results */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQ_ITEMS.map(({ question, answer }) => ({
+              "@type": "Question",
+              name: question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: Array.isArray(answer) ? answer.join(" ") : answer,
+              },
+            })),
+          }),
+        }}
+      />
     </>
   );
 }

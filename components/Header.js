@@ -77,7 +77,13 @@ export default function Header() {
 
           {!loading && user ? (
             <>
-              {/* Desktop: show @username text */}
+              {/* Desktop: dashboard + @username */}
+              <Link
+                href="/dashboard"
+                className="hidden text-sm font-semibold text-navy transition hover:text-[#7C3AED] sm:inline"
+              >
+                Dashboard
+              </Link>
               <Link
                 href="/profile"
                 className="hidden text-sm font-semibold text-[#7C3AED] transition hover:text-[#EC4899] sm:inline"

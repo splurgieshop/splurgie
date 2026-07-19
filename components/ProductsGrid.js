@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
+
+const PAGE_SIZE = 20;
 
 const PRICE_OPTIONS = [
   { value: "all", label: "All Prices" },
@@ -25,6 +27,8 @@ export default function ProductsGrid({ products = [] }) {
   const [category, setCategory] = useState(searchParams.get("category") || "All");
   const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
     const q = searchParams.get("q");
@@ -78,12 +82,36 @@ export default function ProductsGrid({ products = [] }) {
 
   const hasActiveFilters = category !== "All" || priceRange !== "all" || search.trim();
 
+  // Reset visible count whenever filters/sort change
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [search, category, priceRange, sortBy]);
+
+  // Infinite scroll via IntersectionObserver
+  const loadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + PAGE_SIZE);
+  }, []);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      (entries) => { if (entries[0].isIntersecting) loadMore(); },
+      { rootMargin: "200px" }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore]);
+
   function clearFilters() {
     setCategory("All");
     setPriceRange("all");
     setSearch("");
     setSortBy("featured");
   }
+
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
 
   return (
     <div>
@@ -160,13 +188,20 @@ export default function ProductsGrid({ products = [] }) {
 
       {/* Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-        {filtered.map((product) => (
+        {visible.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
 
       {filtered.length === 0 && (
         <p className="py-12 text-center text-slate-500">No products match your filters.</p>
+      )}
+
+      {/* Infinite scroll sentinel */}
+      {hasMore && (
+        <div ref={sentinelRef} className="flex justify-center py-10">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
+        </div>
       )}
     </div>
   );

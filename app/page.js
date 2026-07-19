@@ -31,16 +31,16 @@ export default function Home() {
       <Header />
 
       <section
-        className="flex min-h-[500px] items-center justify-center px-4 py-20 text-center sm:px-6 lg:px-8"
+        className="px-4 py-20 text-center sm:px-6 lg:px-8"
         style={{
-          background: "linear-gradient(to right, #7C3AED, #EC4899)",
+          background: "linear-gradient(135deg, #7C3AED 0%, #a855f7 50%, #EC4899 100%)",
         }}
       >
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-3xl">
           <h1 className="text-5xl font-bold leading-tight text-white sm:text-6xl">
-            Shop things that don&apos;t exist. Yet.
+            Splurge on things that don&apos;t exist. Yet.
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-xl text-white/80">
+          <p className="mt-4 text-xl text-white/80">
             100% fictional. 100% fun.
           </p>
           <HeroSearch />

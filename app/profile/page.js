@@ -197,6 +197,12 @@ export default function ProfilePage() {
               </div>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
+              <Link
+                href="/dashboard"
+                className="rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 px-6 py-2.5 text-center text-sm font-bold text-white shadow-sm transition hover:opacity-90"
+              >
+                Seller Dashboard
+              </Link>
               <button
                 type="button"
                 onClick={() => setShowEditModal(true)}

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
-import { CATEGORY_GRADIENTS } from "@/lib/products";
+import { CATEGORY_GRADIENTS, generateSlug } from "@/lib/products";
 import { inputClass, primaryButtonClass } from "@/lib/ui";
 
 const CATEGORIES = [
@@ -115,6 +115,18 @@ export default function CreateProductPage() {
       const sellerUsername =
         user.user_metadata?.username || user.email?.split("@")[0] || user.email;
 
+      // Generate unique slug
+      const baseSlug = generateSlug(form.name);
+      let slug = baseSlug;
+      const { data: existing } = await supabase
+        .from("products")
+        .select("slug")
+        .eq("slug", baseSlug)
+        .maybeSingle();
+      if (existing) {
+        slug = `${baseSlug}-${Math.random().toString(36).slice(2, 7)}`;
+      }
+
       const { error: insertError } = await supabase.from("products").insert({
         name: form.name,
         description: form.description,
@@ -126,6 +138,7 @@ export default function CreateProductPage() {
           CATEGORY_GRADIENTS[form.category] || CATEGORY_GRADIENTS.Fashion,
         image_url: imageUrl,
         location: form.location || null,
+        slug,
       });
 
       if (insertError) {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import ProductImage from "@/components/ProductImage";
-import { formatPrice, getSellerName, formatSoldCount } from "@/lib/products";
+import { formatPrice, getSellerName, formatSoldCount, productUrl } from "@/lib/products";
 import { primaryButtonClass } from "@/lib/ui";
 
 export default function ProductCard({ product }) {
@@ -12,7 +12,7 @@ export default function ProductCard({ product }) {
 
   return (
     <article className="card-hover group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md shadow-purple-100/50">
-      <Link href={`/products/${product.id}`} className="relative block">
+      <Link href={productUrl(product)} className="relative block">
         <ProductImage
           product={product}
           className="aspect-square transition duration-300 group-hover:scale-105"
@@ -53,7 +53,7 @@ export default function ProductCard({ product }) {
       </Link>
 
       <div className="flex flex-1 flex-col p-4">
-        <Link href={`/products/${product.id}`}>
+        <Link href={productUrl(product)}>
           <h3 className="font-bold text-navy transition group-hover:text-primary">
             {product.name}
           </h3>

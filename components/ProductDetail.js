@@ -8,6 +8,7 @@ import { formatPrice, getSellerName, formatSoldCount } from "@/lib/products";
 import { primaryButtonClass } from "@/lib/ui";
 import ProductReviews from "@/components/ProductReviews";
 import ShareButton from "@/components/ShareButton";
+import ReportButton from "@/components/ReportButton";
 
 export default function ProductDetail({ product, relatedProducts }) {
   const { addToCart, toggleWishlist, wishlist } = useCart();
@@ -58,6 +59,8 @@ export default function ProductDetail({ product, relatedProducts }) {
           <p className="mt-6 leading-relaxed text-slate-600">
             {product.description}
           </p>
+
+          <ReportButton product={product} />
 
           <div className="mt-8 flex gap-3">
             <button

@@ -127,6 +127,24 @@ RLS: full CRUD for own rows only.
 
 RLS: anyone can SELECT; authenticated users can INSERT/DELETE own reviews.
 
+### `products` — additional column
+| Column | Type | Notes |
+|--------|------|-------|
+| slug | text | UNIQUE, nullable (populated for all products via migration: `UPDATE products SET slug = ... WHERE slug IS NULL`) |
+
+Slug generated from name via `generateSlug(name)` in `lib/products.js`. On create-product, uniqueness is checked and a 5-char random suffix is appended if collision.
+
+### `feedback`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid PK | |
+| name | text | nullable |
+| email | text | nullable |
+| message | text | required |
+| created_at | timestamptz | |
+
+RLS: INSERT open (no auth required); SELECT restricted.
+
 ### `notifications`
 | Column | Type | Notes |
 |--------|------|-------|
@@ -146,11 +164,13 @@ RLS: users SELECT/UPDATE own rows; INSERT open (so checkout can notify sellers).
 | Route | File | Description |
 |-------|------|-------------|
 | `/` | `app/page.js` | Homepage: hero with HeroSearch, CategoriesBar, 3 feature cards, Trending Now section |
-| `/products` | `app/products/page.js` | All products with filter/sort sidebar, search |
-| `/products/[id]` | `app/products/[id]/page.js` | Product detail page |
+| `/products` | `app/products/page.js` | All products with compact dropdown filter bar (category, price, sort, search) |
+| `/products/[slug]` | `app/products/[slug]/page.js` | Product detail page — fetches by slug with UUID fallback; redirects old UUID URLs to slug URL |
 | `/seller/[username]` | `app/seller/[username]/page.js` | Public seller profile — all listings + stats |
-| `/about` | `app/about/page.js` | About Splurgie page |
-| `/create-product` | `app/create-product/page.js` | Create new listing (auth required) |
+| `/about` | `app/about/page.js` | About page with FAQ accordion + JSON-LD FAQ schema for SEO/GEO |
+| `/contact` | `app/contact/page.js` | Contact & Feedback form — saves to `feedback` table |
+| `/dashboard` | `app/dashboard/page.js` | Seller Dashboard (separate page — not squeezed into profile) |
+| `/create-product` | `app/create-product/page.js` | Create new listing (auth required) — generates slug on save |
 | `/edit-product/[id]` | `app/edit-product/[id]/page.js` | Edit own listing (auth required) |
 | `/cart` | `app/cart/page.js` | Shopping cart |
 | `/checkout` | `app/checkout/page.js` | Checkout form |
@@ -159,6 +179,14 @@ RLS: users SELECT/UPDATE own rows; INSERT open (so checkout can notify sellers).
 | `/profile` | `app/profile/page.js` | User profile: My Orders / My Listings / Wishlist tabs |
 | `/auth/login` | `app/auth/login/page.js` | Login |
 | `/auth/signup` | `app/auth/signup/page.js` | Sign up |
+
+### Page metadata layouts
+Each client-component page has a companion `layout.js` in its directory exporting `metadata` (Next.js App Router pattern — client pages can't export metadata directly):
+- `app/auth/login/layout.js` → "Sign In — Splurgie"
+- `app/auth/signup/layout.js` → "Create Account — Splurgie"
+- `app/contact/layout.js` → "Contact & Feedback — Splurgie"
+- `app/profile/layout.js` → "My Profile — Splurgie"
+- `app/create-product/layout.js` → "Create a Listing — Splurgie"
 
 ---
 
@@ -173,7 +201,7 @@ RLS: users SELECT/UPDATE own rows; INSERT open (so checkout can notify sellers).
 | `ProductCard.js` | Product grid card: image, name, price, @seller (link to `/seller/[username]`), sold count, wishlist heart, Add to Cart |
 | `ProductDetail.js` | Full product page content: image, details, Ships from, sold count badge, Add to Cart, wishlist, ProductReviews |
 | `ProductImage.js` | Renders product image (uploaded) or gradient fallback |
-| `ProductsGrid.js` | Products grid with filter sidebar and search — reads `?q=` from URL |
+| `ProductsGrid.js` | Products grid with compact horizontal filter bar (search input, category dropdown, price dropdown, sort dropdown) — initialises from `?category=` and `?q=` URL params |
 | `ProductsPageContent.js` | Wrapper for ProductsGrid (needed for Suspense) |
 | `ProductReviews.js` | Real reviews section + write-a-review form (star picker, text, submit) |
 | `CheckoutForm.js` | Full checkout: shipping details, fake payment, saves order, increments sold_count, notifies sellers, redirects to confirmation |
@@ -183,7 +211,9 @@ RLS: users SELECT/UPDATE own rows; INSERT open (so checkout can notify sellers).
 | `TrackingContent.js` | Live tracking — reads URL params, computes stage from elapsed time, shows seller origin |
 | `NotificationBell.js` | Bell icon in header with unread badge — dropdown of notifications, marks read on open |
 | `StarRating.js` | Display-only star rating (filled/empty stars) |
-| `Footer.js` | Site footer |
+| `Footer.js` | Site footer: Instagram link (@splurgie.shop), About, Contact & Feedback links, disclaimer, copyright year |
+| `ShareButton.js` | Share button on product pages — mobile: native OS sheet; desktop: dropdown with Copy Link, WhatsApp, Telegram, X, Facebook |
+| `DashboardContent.js` | Seller dashboard: Revenue, Sales, Listings, Avg Rating stats; Sales Over Time chart (7d/30d/90d); Top Products by revenue; Category breakdown |
 
 ---
 
@@ -201,8 +231,8 @@ RLS: users SELECT/UPDATE own rows; INSERT open (so checkout can notify sellers).
 | File | Purpose |
 |------|---------|
 | `lib/supabase.js` | Supabase client singleton |
-| `lib/fetchProducts.js` | `fetchAllProducts`, `fetchRecentProducts`, `fetchTrendingProducts`, `fetchProductById`, `fetchProductsBySeller`, `fetchProductsByUsername`, `fetchProductsByIds`, `fetchReviewsByProduct` |
-| `lib/products.js` | `sampleProducts` (fallback), `CATEGORY_GRADIENTS`, `DEFAULT_REVIEWS`, `formatPrice`, `getSellerName`, `formatSoldCount` |
+| `lib/fetchProducts.js` | `fetchAllProducts`, `fetchRecentProducts`, `fetchTrendingProducts`, `fetchProductById`, `fetchProductBySlug` (tries slug first, then UUID fallback), `fetchProductsBySeller`, `fetchProductsByUsername`, `fetchProductsByIds`, `fetchReviewsByProduct` |
+| `lib/products.js` | `sampleProducts` (fallback), `CATEGORY_GRADIENTS`, `DEFAULT_REVIEWS`, `formatPrice`, `getSellerName`, `formatSoldCount`, `generateSlug(name)`, `productUrl(product)` |
 | `lib/orderStatus.js` | `ORDER_STAGES`, `getOrderStageIndex(createdAt)`, `getOrderStatus(createdAt)` — computes live delivery stage from time elapsed |
 | `lib/ui.js` | Shared Tailwind class strings: `inputClass`, `primaryButtonClass` |
 
@@ -324,12 +354,17 @@ Uses first registered user's ID as `seller_id`, but displays varied `seller_user
 
 ---
 
-## Still To Build (Pre-Launch)
-1. **Run seed SQL** — 77 products via Supabase SQL Editor (file: `seed-products.sql`)
-2. **SEO-friendly product URL slugs** — deferred; requires `slug` column, migration, route change from `[id]` to `[slug]`
-3. **Seller dashboard** — sales volume chart, total revenue, best-selling products
-4. **Phase 4** — marketing / launch page
-5. **Endless scroll** — deferred to a later session
+## Analytics
+Vercel Analytics integrated: `@vercel/analytics/next` installed, `<Analytics />` added to `app/layout.js`. Dashboard: https://vercel.com/splurgie/splurgie/analytics
+
+---
+
+## Still To Build / Nice To Have
+1. **Pagination / infinite scroll** — 101+ products all load at once; performance will degrade with more listings
+2. **Profile photo upload** — users currently show initials avatar only
+3. **Custom 404 page** — currently shows Next.js default
+4. **Marketing / launch page** — a press-ready landing page or launch copy
+5. **Product description quality** — seed descriptions sometimes had no space after periods; fixed via SQL: `UPDATE products SET description = regexp_replace(description, '\.([A-Z])', '. \1', 'g') WHERE description ~ '\.([A-Z])'`
 
 ---
 
@@ -354,5 +389,5 @@ Uses first registered user's ID as `seller_id`, but displays varied `seller_user
 
 ---
 
-*Last updated: 2026-07-08*  
+*Last updated: 2026-07-10*  
 *Update this file whenever a new feature, design change, DB table, or capability is added.*
