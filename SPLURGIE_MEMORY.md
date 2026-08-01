@@ -134,6 +134,19 @@ RLS: anyone can SELECT; authenticated users can INSERT/DELETE own reviews.
 
 Slug generated from name via `generateSlug(name)` in `lib/products.js`. On create-product, uniqueness is checked and a 5-char random suffix is appended if collision.
 
+### `reports`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid PK | auto-generated |
+| product_id | uuid → products | CASCADE delete |
+| reporter_id | uuid → auth.users | SET NULL on delete |
+| reason | text | required |
+| note | text | nullable |
+| created_at | timestamptz | |
+
+RLS: authenticated users can INSERT own reports only.
+When a report is submitted, a notification is sent to the seller via the `notifications` table.
+
 ### `feedback`
 | Column | Type | Notes |
 |--------|------|-------|
@@ -163,7 +176,7 @@ RLS: users SELECT/UPDATE own rows; INSERT open (so checkout can notify sellers).
 
 | Route | File | Description |
 |-------|------|-------------|
-| `/` | `app/page.js` | Homepage: hero with HeroSearch, CategoriesBar, 3 feature cards, Trending Now section |
+| `/` | `app/page.js` | Homepage: full-width mosaic hero (real product images via HeroMosaic.js), HeroSearch, CategoriesBar, Trending Now section |
 | `/products` | `app/products/page.js` | All products with compact dropdown filter bar (category, price, sort, search) |
 | `/products/[slug]` | `app/products/[slug]/page.js` | Product detail page — fetches by slug with UUID fallback; redirects old UUID URLs to slug URL |
 | `/seller/[username]` | `app/seller/[username]/page.js` | Public seller profile — all listings + stats |
@@ -214,6 +227,8 @@ Each client-component page has a companion `layout.js` in its directory exportin
 | `Footer.js` | Site footer: Instagram link (@splurgie.shop), About, Contact & Feedback links, disclaimer, copyright year |
 | `ShareButton.js` | Share button on product pages — mobile: native OS sheet; desktop: dropdown with Copy Link, WhatsApp, Telegram, X, Facebook |
 | `DashboardContent.js` | Seller dashboard: Revenue, Sales, Listings, Avg Rating stats; Sales Over Time chart (7d/30d/90d); Top Products by revenue; Category breakdown |
+| `ReportButton.js` | "Report Listing" button on product detail pages. Opens modal with reason dropdown + optional note. Requires login. Inserts into `reports` table AND sends seller a notification via `notifications` table. |
+| `HeroMosaic.js` | Client component used in homepage hero. Fetches top 30 products by sold_count, renders their real images (or gradient fallbacks) as a tiled mosaic grid at 22% opacity behind the hero text. |
 
 ---
 
@@ -296,10 +311,22 @@ Each client-component page has a companion `layout.js` in its directory exportin
 - About page at `/about`
 
 ### Homepage
-- Gradient hero with tagline + HeroSearch bar + "or browse all products →" link
-- CategoriesBar: 10 category pills below hero (Fashion, Tech Gadgets, Home, Food & Drink, Beauty, Weird & Wonderful, Toys & Games, Pets, Art & Creativity, Magical)
-- 3 feature cards ("Discover fictional products", "Shop without spending", "Create & sell your ideas") — "Why Splurgie?" heading removed
+- **Full-width mosaic hero**: purple-to-pink gradient with real product images tiled as background at 22% opacity (`HeroMosaic.js`). Headline: "Shop things that don't exist. Yet." + HeroSearch + "or browse all products →"
+- CategoriesBar: 10 category pill icons below hero
 - Trending Now section (6 products sorted by `sold_count DESC`)
+- "Why Splurgie?" feature cards removed (cluttered the page, delayed product discovery)
+
+### Infinite Scroll
+- `ProductsGrid.js` loads 20 products at a time (`PAGE_SIZE = 20`)
+- `IntersectionObserver` with `rootMargin: "200px"` auto-loads next 20 when sentinel div enters viewport
+- Spinner shown at bottom when more products remain
+- `visibleCount` resets to 20 whenever filters/sort change
+
+### Report Listing
+- "Report Listing" button on every product detail page (`ReportButton.js`)
+- Requires login — redirects to `/auth/login` if not authenticated
+- Reasons: Inappropriate content, Spam or misleading, Hateful or offensive, IP violation, Other
+- On submit: inserts row into `reports` table + sends seller notification: `"⚠️ Your listing "[name]" has been reported. Please review it — listings that violate our community guidelines may be removed."`
 
 ---
 
@@ -348,9 +375,24 @@ Tracking link carries `?tracking=XXX&created=ISO&origin=LOCATION` so the trackin
 ---
 
 ## Seed Data
-77 fictional products ready to insert — file at `/Users/melvinandnatalie/splurgie/seed-products.sql`.  
-To run: paste into Supabase SQL Editor → Run.  
-Uses first registered user's ID as `seller_id`, but displays varied `seller_username` values.
+100+ fictional products across all categories inserted via SQL batches.
+
+**Hardcoded seller UUID for all seed SQL**: `37f827a5-4ba7-44e6-b51c-c88801ba1f3b` (email: splurgie.shop@gmail.com)
+
+**Always use this pattern for seed SQL** to avoid RLS linter warnings and seller_id NULL errors:
+```sql
+DO $$
+DECLARE seller uuid := '37f827a5-4ba7-44e6-b51c-c88801ba1f3b';
+BEGIN
+INSERT INTO products (name, description, price, category, seller_id, seller_username, gradient, image_url, location, slug, badge, sold_count, created_at) VALUES
+(...);
+END $$;
+```
+
+Seed files in repo:
+- `seed_products_batch2.sql` — 10 internet meme products (Rizz Cologne, Delulu Glasses, Crashout Journal etc.)
+- `seed_products_day3.sql` — 5 products (CEO Cardigan, Quantum Sock Locator, Emotional Support Stapler etc.)
+- Additional batches created in-session: Beauty/Food/Pets meme products, Toys & Games / Home, World Cup / Weather / GPT / News themed, oxymoronic useless-product comedy items
 
 ---
 
@@ -360,11 +402,11 @@ Vercel Analytics integrated: `@vercel/analytics/next` installed, `<Analytics />`
 ---
 
 ## Still To Build / Nice To Have
-1. **Pagination / infinite scroll** — 101+ products all load at once; performance will degrade with more listings
-2. **Profile photo upload** — users currently show initials avatar only
-3. **Custom 404 page** — currently shows Next.js default
-4. **Marketing / launch page** — a press-ready landing page or launch copy
-5. **Product description quality** — seed descriptions sometimes had no space after periods; fixed via SQL: `UPDATE products SET description = regexp_replace(description, '\.([A-Z])', '. \1', 'g') WHERE description ~ '\.([A-Z])'`
+1. **Profile photo upload** — users currently show initials avatar only
+2. **Custom 404 page** — currently shows Next.js default
+3. **Leaderboard** — top sellers / most-sold products ranking page
+4. **Homepage social proof** — real live stats (product count, total sold) fetched from Supabase
+5. **Product description quality** — fix any descriptions with no space after periods: `UPDATE products SET description = regexp_replace(description, '\.([A-Z])', '. \1', 'g') WHERE description ~ '\.([A-Z])'`
 
 ---
 
@@ -385,9 +427,10 @@ Vercel Analytics integrated: `@vercel/analytics/next` installed, `<Analytics />`
 - **Vercel auto-deploy is disabled** — always use `vercel --prod` from the user's Cursor terminal
 - **useSearchParams() requires Suspense** — any page using it needs `<Suspense>` in the parent `page.js`
 - **Supabase free tier**: 4 confirmation emails/hour — check spam for verification emails
-- **Switching computers**: clone repo, run `npm install`, copy `.env.local`, set git config, run `vercel link`
+- **Switching computers**: clone repo, run `npm install`, copy `.env.local` (AirDrop or `cat ~/.env.local`), set git config below, run `vercel link`
+- **MacBook setup**: `git config --global user.email "splurgie.shop@gmail.com" && git config --global user.name "splurgieshop"` — then `vercel link` in the splurgie folder to reconnect Vercel CLI
 
 ---
 
-*Last updated: 2026-07-10*  
+*Last updated: 2026-08-01*  
 *Update this file whenever a new feature, design change, DB table, or capability is added.*
