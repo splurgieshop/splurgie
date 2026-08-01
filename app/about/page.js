@@ -219,15 +219,6 @@ export default function AboutPage() {
             ))}
           </div>
         </section>
-
-        {/* Disclaimer */}
-        <section className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 lg:px-8">
-          <p className="text-xs text-slate-400">
-            🛍️ Splurgie is a simulated shopping platform. No real transactions
-            occur. No real products are sold or delivered. All purchases are
-            fictional and for entertainment purposes only.
-          </p>
-        </section>
       </main>
 
       {/* JSON-LD FAQ schema for Google rich results */}
