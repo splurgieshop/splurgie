@@ -67,7 +67,7 @@ export default function ProductDetail({ product, relatedProducts }) {
               onClick={() => addToCart(product.id)}
               className={`${primaryButtonClass} flex-1 rounded-xl py-3.5 text-sm`}
             >
-              Add to Cart
+              Add to cart
             </button>
             <ShareButton product={product} />
             <button
@@ -97,7 +97,7 @@ export default function ProductDetail({ product, relatedProducts }) {
 
       {relatedProducts.length > 0 && (
         <section className="mt-16">
-          <h2 className="page-heading text-2xl">You might also like</h2>
+          <h2 className="page-heading text-2xl">More nonsense you&apos;ll love</h2>
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />

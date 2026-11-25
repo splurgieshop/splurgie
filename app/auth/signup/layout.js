@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Create Account — Splurgie",
-  description: "Join Splurgie for free. No credit card needed. Browse, buy, and sell fictional products.",
+  title: "Join Splurgie",
+  description: "Join Splurgie for free. No credit card, no catch. Buy and sell things that don't exist.",
 };
 
 export default function SignupLayout({ children }) {

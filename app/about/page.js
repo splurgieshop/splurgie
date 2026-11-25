@@ -2,39 +2,39 @@ import Link from "next/link";
 import Header from "@/components/Header";
 
 export const metadata = {
-  title: "About Splurgie — The Fictional Shopping Platform",
+  title: "About Splurgie — The Fake Store With a Real Checkout",
   description:
-    "Splurgie is a free social commerce platform where you browse, buy, and sell entirely fictional products. The joy of shopping — with zero dollars spent. No credit card needed.",
+    "Splurgie is a free fake store where you browse, 'buy' and sell entirely fictional products. All the shopping thrills, zero dollars spent. No credit card needed.",
 };
 
 const FAQ_ITEMS = [
   {
     question: "What is Splurgie?",
     answer:
-      "Splurgie is a free social commerce platform where users browse, 'buy', and sell entirely fictional products. Every item on Splurgie is invented by its community — there are no real brands, no real prices, and no real deliveries. It recreates the full emotional experience of online shopping (browsing, carting, checking out, tracking) purely for fun and creativity.",
+      "Splurgie is a free fake store where users browse, 'buy', and sell entirely fictional products. Every item is invented by the community: no real brands, no real prices, no real deliveries. It recreates the full feeling of online shopping (browsing, carting, checking out, tracking) purely for fun and creativity.",
   },
   {
     question: "Is Splurgie free? Do I need a credit card?",
     answer:
-      "Splurgie is completely free. You never need to enter a real credit card or any payment details. When you check out, you can enter any card number — it all goes through because no real transaction ever occurs. Splurgie is a simulated shopping experience for entertainment purposes only.",
+      "Splurgie is completely free. You never need a real credit card or any payment details. At checkout you can type any card number and it all goes through, because no real transaction ever happens. Splurgie is a simulated shopping experience, for entertainment only.",
   },
   {
     question: "What can you do on Splurgie?",
     answer: [
-      "Browse thousands of fictional products across 10 categories: Fashion, Tech Gadgets, Home, Food & Drink, Beauty, Weird & Wonderful, Toys & Games, Pets, Art & Creativity, and Magical.",
-      "Add items to a cart and go through a full, realistic checkout flow — no real payment needed.",
-      "Track your fictional order in real time as it moves from Processing → Shipped → Out for Delivery → Delivered.",
-      "Save products to a personal wishlist and come back to them anytime.",
-      "Leave star ratings and written reviews on any product.",
-      "Share products with friends via WhatsApp, Telegram, X, Facebook, or a direct link.",
-      "Create your own listings — every account is a seller account. Upload an image, write a description, set a price, and publish your fictional product idea for the community to discover.",
-      "Track your seller performance in a personal dashboard showing revenue, top products, and sales over time.",
+      "Browse 100+ fictional products across 10 categories: Fashion, Tech Gadgets, Home, Food & Drink, Beauty, Weird & Wonderful, Toys & Games, Pets, Art & Creativity, and Magical.",
+      "Add items to a cart and go through a full, realistic checkout. No real payment needed.",
+      "Track your fictional order as it moves from Processing to Shipped to Out for Delivery to Delivered. It never actually arrives.",
+      "Heart products to save them to your wishlist.",
+      "Leave star ratings and reviews on anything.",
+      "Share products with friends on WhatsApp, Telegram, X, Facebook, or by link.",
+      "Create your own listings. Every account is a seller account. Upload an image, write a description, set a price, and publish your product idea.",
+      "Check your seller dashboard for revenue, top products, and sales over time.",
     ],
   },
   {
     question: "Can anyone sell on Splurgie?",
     answer:
-      "Yes — every Splurgie account is both a buyer and a seller. Once you sign up, you can immediately create a product listing by giving it a name, description, price, category, and an optional image. Your listing appears on the platform instantly. You can track how many 'sales' your product has received and monitor performance in your personal Seller Dashboard.",
+      "Yes. Every Splurgie account is both a buyer and a seller. Sign up, then create a listing with a name, description, price, category, and an optional image. It goes live instantly. You can see how many 'sales' it gets in your Seller Dashboard.",
   },
   {
     question: "Is my personal information safe on Splurgie?",
@@ -52,25 +52,24 @@ export default function AboutPage() {
         <section className="bg-gradient-to-br from-[#7C3AED] to-[#EC4899] px-4 py-20 text-center text-white sm:px-6 lg:px-8">
           <p className="text-5xl">✨</p>
           <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Welcome to Splurgie
+            Welcome to Splurgie. Nothing here is real.
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-lg font-medium text-purple-100">
-            The joy of shopping — reimagined. Browse, buy, and sell products
-            that don&apos;t exist in the real world. No credit card needed.
-            Ever.
+            The joy of shopping, reimagined. Browse, buy, and sell products
+            that don&apos;t exist. No credit card. Ever.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="/products"
               className="rounded-full bg-white px-6 py-3 text-sm font-bold text-[#7C3AED] transition hover:bg-purple-50"
             >
-              Start Shopping
+              Start splurging
             </Link>
             <Link
               href="/auth/signup"
               className="rounded-full border-2 border-white px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10"
             >
-              Create an Account
+              Make an account
             </Link>
           </div>
         </section>
@@ -81,17 +80,15 @@ export default function AboutPage() {
             What is Splurgie?
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-slate-600">
-            Splurgie is a social commerce platform built around one simple
-            idea: the thrill of online shopping is about the experience, not
-            the spending. We&apos;ve recreated every dopamine hit — the hunt,
-            the cart, the checkout, the tracking — without the real-world
+            Splurgie is built on one idea: the best part of online shopping
+            is the click, not the bill. We rebuilt every dopamine hit (the
+            hunt, the cart, the checkout, the tracking) and left out the
             price tag.
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-center text-slate-600">
-            Every product on Splurgie is 100% fictional and invented by our
-            community. You&apos;ll never find a real brand here. Instead,
-            you&apos;ll discover weird, wonderful, and wildly creative products
-            dreamed up by people just like you.
+            Every product is 100% fictional and made up by our community. No
+            real brands. Just weird, wonderful, wildly creative stuff dreamed
+            up by people like you.
           </p>
         </section>
 
@@ -99,29 +96,29 @@ export default function AboutPage() {
         <section className="bg-purple-50 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl">
             <h2 className="text-center text-3xl font-extrabold text-[#7C3AED]">
-              How It Works
+              How it works
             </h2>
             <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 {
                   icon: "🔍",
                   step: "1. Browse",
-                  desc: "Explore thousands of fictional products across Fashion, Tech, Home, Food, Beauty, and more.",
+                  desc: "Scroll 100+ products that shouldn't exist. Fashion, tech, food, beauty, and weirder.",
                 },
                 {
                   icon: "🛒",
-                  step: "2. Add to Cart",
-                  desc: "Found something you love? Add it to your cart just like any real shopping app.",
+                  step: "2. Add to cart",
+                  desc: "Add it to your cart like it's a real shopping app. The app is real. The product isn't.",
                 },
                 {
                   icon: "💳",
-                  step: "3. Fake Checkout",
-                  desc: "Fill in your details, enter any card number — it all goes through. Zero real money changes hands.",
+                  step: "3. Fake checkout",
+                  desc: "Fill in your details and type any card number. It all goes through. Zero money moves.",
                 },
                 {
                   icon: "📦",
-                  step: "4. Track Your Order",
-                  desc: "Watch your fictional package move through Processing → Shipped → Delivered. Pure satisfaction.",
+                  step: "4. Track your nothing",
+                  desc: "Watch your package go from Processing to Shipped to Delivered. It never arrives. Pure satisfaction.",
                 },
               ].map(({ icon, step, desc }) => (
                 <div key={step} className="text-center">
@@ -139,19 +136,19 @@ export default function AboutPage() {
         {/* Sell too */}
         <section className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-extrabold text-[#7C3AED]">
-            Everyone&apos;s a Seller Too
+            Everyone sells here, too
           </h2>
           <p className="mt-4 text-slate-600">
-            Every Splurgie account is both buyer and seller. Dream up a product,
-            write a description, upload an image, and list it — in minutes.
-            Watch the community discover and &ldquo;buy&rdquo; your creation.
-            It&apos;s the creative outlet you never knew you needed.
+            Every account is a buyer and a seller. Make up a product, write a
+            description, upload an image, list it. Takes minutes. Then watch
+            strangers &ldquo;buy&rdquo; your creation. Best creative outlet you
+            didn&apos;t know you needed.
           </p>
           <Link
             href="/create-product"
             className="mt-6 inline-block rounded-full bg-gradient-to-r from-[#7C3AED] to-[#EC4899] px-8 py-3 text-sm font-bold text-white transition hover:opacity-90"
           >
-            List Your First Product →
+            List your first product →
           </Link>
         </section>
 
@@ -184,10 +181,10 @@ export default function AboutPage() {
         {/* FAQ */}
         <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
           <h2 className="text-center text-3xl font-extrabold text-[#7C3AED]">
-            Frequently Asked Questions
+            Questions people ask
           </h2>
           <p className="mt-3 text-center text-slate-500">
-            Everything you need to know about Splurgie.
+            Yes, it&apos;s really fake.
           </p>
           <div className="mt-10 space-y-4">
             {FAQ_ITEMS.map(({ question, answer }) => (

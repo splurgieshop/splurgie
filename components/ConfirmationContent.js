@@ -36,7 +36,7 @@ export default function ConfirmationContent() {
       </div>
 
       <h1 className="page-heading mt-6 text-3xl sm:text-5xl">
-        Your order is on its way!
+        Your order is on its way. To nowhere.
       </h1>
       <p className="mt-3 font-medium text-slate-500">
         Congratulations on the most satisfying fake purchase of your life.
@@ -75,14 +75,14 @@ export default function ConfirmationContent() {
         href={`/tracking?tracking=${encodeURIComponent(trackingNumber)}&created=${encodeURIComponent(created)}&origin=${encodeURIComponent(origin)}`}
         className={`${primaryButtonClass} mt-8 inline-block rounded-xl px-8 py-3.5 text-sm`}
       >
-        Track My Order
+        Track my nothing
       </Link>
 
       <Link
         href="/products"
         className="mt-4 block text-sm font-bold text-primary hover:text-accent"
       >
-        Keep shopping →
+        Buy more nonsense →
       </Link>
     </div>
   );

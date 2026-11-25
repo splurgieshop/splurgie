@@ -3,8 +3,8 @@ import Header from "@/components/Header";
 import ConfirmationContent from "@/components/ConfirmationContent";
 
 export const metadata = {
-  title: "Order Confirmed — Splurgie",
-  description: "Your Splurgie order has been placed",
+  title: "Order Confirmed (Allegedly) — Splurgie",
+  description: "Order confirmed. Nothing is shipping, but congrats.",
 };
 
 export default function ConfirmationPage() {

@@ -13,7 +13,7 @@ export default function CheckoutPage() {
       <main className="mx-auto max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="page-heading text-3xl sm:text-4xl">Checkout</h1>
         <p className="mt-2 font-medium text-slate-500">
-          Almost there — fill in the details for your pretend order.
+          Fill in anything. Seriously, any details work.
         </p>
         <div className="mt-8">
           <CheckoutForm />

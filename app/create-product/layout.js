@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Create a Listing — Splurgie",
-  description: "List your fictional product idea on Splurgie. Every account is a seller — no approval needed.",
+  title: "List Your Nonsense — Splurgie",
+  description: "List a fictional product in about 60 seconds. Every account is a seller. No approval needed.",
 };
 
 export default function CreateProductLayout({ children }) {

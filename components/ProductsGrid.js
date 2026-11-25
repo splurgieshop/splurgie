@@ -130,7 +130,7 @@ export default function ProductsGrid({ products = [] }) {
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search products..."
+            placeholder="Search the nonsense…"
             className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm text-navy outline-none transition focus:border-primary focus:ring-2 focus:ring-purple-100"
           />
         </div>
@@ -194,7 +194,7 @@ export default function ProductsGrid({ products = [] }) {
       </div>
 
       {filtered.length === 0 && (
-        <p className="py-12 text-center text-slate-500">No products match your filters.</p>
+        <p className="py-12 text-center text-slate-500">Nothing matches. Try fewer filters.</p>
       )}
 
       {/* Infinite scroll sentinel */}

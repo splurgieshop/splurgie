@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "My Profile — Splurgie",
-  description: "Manage your Splurgie account, view your orders, listings, and wishlist.",
+  title: "Your Profile — Splurgie",
+  description: "Your orders, listings and wishlist, all in one place.",
 };
 
 export default function ProfileLayout({ children }) {

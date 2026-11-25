@@ -156,7 +156,7 @@ export default function CreateProductPage() {
   function getSubmitLabel() {
     if (uploading) return "Uploading...";
     if (submitting) return "Listing...";
-    return "List My Product";
+    return "List it";
   }
 
   if (loading || !user) {
@@ -181,10 +181,10 @@ export default function CreateProductPage() {
           ← Back to profile
         </Link>
         <h1 className="page-heading text-3xl sm:text-4xl">
-          Create New Listing
+          List your nonsense
         </h1>
         <p className="mt-2 text-slate-500">
-          List a fictional product for the Splurgie community
+          Make up a product. Price it. Watch strangers buy it.
         </p>
 
         <div className="mt-6 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5">
@@ -243,7 +243,7 @@ export default function CreateProductPage() {
               required
               rows={4}
               className={`${inputClass} resize-none`}
-              placeholder="Describe your imaginary product..."
+              placeholder="Describe it like it's real…"
             />
           </div>
 

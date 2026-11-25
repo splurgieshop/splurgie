@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const product = await fetchProductBySlug(slug);
-  if (!product) return { title: "Product Not Found — Splurgie" };
+  if (!product) return { title: "Nothing Here — Splurgie" };
   return {
     title: `${product.name} — Splurgie`,
     description: product.description,
@@ -31,9 +31,9 @@ export default async function ProductPage({ params }) {
         <Header />
         <main className="mx-auto max-w-7xl flex-1 px-4 py-20 text-center sm:px-6 lg:px-8">
           <span className="text-5xl">🔍</span>
-          <h1 className="page-heading mt-4 text-3xl">Product not found</h1>
+          <h1 className="page-heading mt-4 text-3xl">This product doesn&apos;t exist. Even by our standards.</h1>
           <p className="mt-2 text-slate-500">
-            This fictional product may have vanished into another dimension.
+            It may have vanished into another dimension. Or the link is wrong.
           </p>
           <Link
             href="/products"

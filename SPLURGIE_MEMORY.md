@@ -324,7 +324,7 @@ Why: Vercel analytics (30 days) showed 25 visitors, 156 page views, 68% bounce. 
 - "Got a dumb idea? Perfect." lime sell banner → `/create-product`
 - "Top creators" (top 3 sellers by total sold) under the sell banner
 - Removed from homepage: "how it works" steps, categories bar, hero search bar (header search still exists on desktop), FAQ (About page still has FAQ)
-- **Dark theme on inner pages**: `components/ThemeShell.js` (in `app/layout.js`) adds class `dk` on every route except those in `lib/theme.js` (`/auth`, `/profile`, `/dashboard`, `/create-product`, `/edit-product` stay light for now). The `.dk` block at the bottom of `globals.css` remaps existing Tailwind utilities (bg-white, text-navy, text-primary → lime, purple borders, primary gradient buttons → lime) so components don't need rewriting. `Header.js` picks dark/light from the route. Footer is dark everywhere. To theme a remaining page, remove it from `LIGHT_ROUTE_PREFIXES`.
+- **Dark theme on inner pages**: `components/ThemeShell.js` (in `app/layout.js`) adds class `dk` on every route except those listed in `LIGHT_ROUTE_PREFIXES` in `lib/theme.js` (currently empty, so the whole site is dark). The `.dk` block at the bottom of `globals.css` remaps existing Tailwind utilities (bg-white, text-navy, text-primary → lime, purple borders, primary gradient buttons → lime) so components don't need rewriting. `Header.js` picks dark/light from the route. Footer is dark everywhere. To theme a remaining page, remove it from `LIGHT_ROUTE_PREFIXES`.
 - Styles live in `app/globals.css` under the `.hm-*` prefix (scoped to `<main className="hm">`). Colors: bg `#0d0817`, lime `#c6ff4a`, pink `#ff5fb0`, violet `#a78bfa`. Footer is still the global purple one.
 
 ### Infinite Scroll
@@ -420,6 +420,16 @@ Vercel Analytics integrated: `@vercel/analytics/next` installed, `<Analytics />`
 5. **Homepage FAQ / GEO content** — compact FAQ was dropped in the redesign; consider re-adding
 6. **Product page "Buy" copy** — homepage says "Buy it free" and links to the product page
 7. **Product description quality** — fix any descriptions with no space after periods: `UPDATE products SET description = regexp_replace(description, '\.([A-Z])', '. \1', 'g') WHERE description ~ '\.([A-Z])'`
+
+---
+
+## Voice & Tone (set 2026-08)
+Cheeky Gen Z: short, deadpan, a bit unhinged, never confusing. Examples live in the UI now: "Your cart is empty. Fix that.", "Check out (for free)", "Track your nothing", "Buy more nonsense", "Search the nonsense…".
+- Product vocabulary: "nonsense" (products), "pretend/fake" (checkout), "nothing"/"package of nothing" (orders), "creators" (sellers), "splurging" (shopping).
+- Sentence case for buttons and headings. No exclamation marks on system copy.
+- Errors and legal/safety copy (community guidelines, report flow, simulated-purchase disclaimer) stay plain and clear — jokes go on empty states, confirmations and the checkout.
+- Stay accurate: say "100+ products" (not "thousands"), and keep it clear that checkout/tracking are real features while products, payments and deliveries are fictional.
+- Rewritten in one pass via a script; Notification text ("Someone bought your…") and Report flow strings were left as they were.
 
 ---
 

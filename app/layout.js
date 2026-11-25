@@ -15,7 +15,7 @@ const nunito = Nunito({
 export const metadata = {
   title: "Splurgie — Shop products that don't exist",
   description:
-    "A fun social commerce platform where you browse and buy fictional products. All the dopamine, none of the spending.",
+    "A fake store with a very real checkout. Buy ridiculous things for $0 and track a package that never arrives.",
 };
 
 export default function RootLayout({ children }) {

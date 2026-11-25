@@ -97,7 +97,7 @@ export default function OrderSummary({
               href="/checkout"
               className={`${primaryButtonClass} mt-6 block w-full rounded-xl py-3 text-center text-sm`}
             >
-              Proceed to Checkout
+              Check out (for free)
             </Link>
           )}
 
@@ -106,7 +106,7 @@ export default function OrderSummary({
               type="submit"
               className={`${primaryButtonClass} mt-6 w-full rounded-xl py-3 text-sm`}
             >
-              Place Order →
+              Place order (it&apos;s free) →
             </button>
           )}
         </>

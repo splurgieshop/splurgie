@@ -31,11 +31,11 @@ export default function TrackingContent() {
   }, [createdAt]);
 
   const lastUpdate = useMemo(() => {
-    if (currentStage === 1) return "Order received and being prepared for shipment";
-    if (currentStage === 2) return "Package departed Splurgie Fulfillment Center";
-    if (currentStage === 3) return "Package out for delivery in your area";
-    if (currentStage >= 4) return "Package delivered to your address";
-    return "Order placed successfully";
+    if (currentStage === 1) return "Order received. Packing a box of nothing.";
+    if (currentStage === 2) return "Package left the Splurgie Fulfillment Center. Headed nowhere.";
+    if (currentStage === 3) return "Out for delivery in your area. Nobody's home.";
+    if (currentStage >= 4) return "Delivered. Check your porch. (There's nothing there.)";
+    return "Order placed. Great taste.";
   }, [currentStage]);
 
   return (

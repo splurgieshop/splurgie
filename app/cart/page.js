@@ -13,7 +13,7 @@ export default function CartPage() {
       <main className="mx-auto max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="page-heading text-3xl sm:text-4xl">Your Cart</h1>
         <p className="mt-2 font-medium text-slate-500">
-          Review your fictional haul before checkout.
+          Your haul of imaginary stuff. Looking good.
         </p>
         <div className="mt-8">
           <CartContent />

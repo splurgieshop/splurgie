@@ -3,8 +3,8 @@ import Header from "@/components/Header";
 import ProductsPageContent from "@/components/ProductsPageContent";
 
 export const metadata = {
-  title: "Products — Splurgie",
-  description: "Browse all fictional products on Splurgie",
+  title: "All the Nonsense — Splurgie",
+  description: "Browse 100+ fictional products on Splurgie. Add to cart, check out for $0, track a package that never arrives.",
 };
 
 export default function ProductsPage() {
@@ -12,12 +12,12 @@ export default function ProductsPage() {
     <>
       <Header />
       <main className="mx-auto max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
-        <h1 className="page-heading text-3xl sm:text-4xl">All Products</h1>
+        <h1 className="page-heading text-3xl sm:text-4xl">All the nonsense</h1>
         <p className="mt-2 font-medium text-slate-500">
-          Filter, sort, and splurge on things that don&apos;t exist.
+          Filter it, sort it, pretend to buy it.
         </p>
         <div className="mt-8">
-          <Suspense fallback={<div className="py-20 text-center text-slate-500">Loading products...</div>}>
+          <Suspense fallback={<div className="py-20 text-center text-slate-500">Loading the nonsense…</div>}>
             <ProductsPageContent />
           </Suspense>
         </div>

@@ -249,9 +249,9 @@ export default function ProfilePage() {
                 <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 py-16 text-center">
                   <span className="text-5xl">🛍️</span>
                   <p className="mt-4 font-bold text-navy">No orders yet</p>
-                  <p className="mt-2 text-sm text-slate-500">Go splurge on something!</p>
+                  <p className="mt-2 text-sm text-slate-500">Go buy something that doesn&apos;t exist.</p>
                   <Link href="/products" className={`${primaryButtonClass} mt-6 inline-block rounded-xl px-8 py-3 text-sm`}>
-                    Browse Products
+                    Start splurging
                   </Link>
                 </div>
               ) : myOrders.map((order) => {
@@ -305,7 +305,7 @@ export default function ProfilePage() {
                 <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 py-16 text-center">
                   <span className="text-5xl">🛍️</span>
                   <p className="mt-4 font-bold text-navy">No listings yet</p>
-                  <p className="mt-2 text-sm text-slate-500">Create your first fictional product!</p>
+                  <p className="mt-2 text-sm text-slate-500">Make something up. List it.</p>
                 </div>
               ) : (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -354,13 +354,13 @@ export default function ProfilePage() {
                     Your wishlist is empty
                   </p>
                   <p className="mt-2 text-sm text-slate-500">
-                    Heart some products to save them here
+                    Heart things to save them here
                   </p>
                   <Link
                     href="/products"
                     className={`${primaryButtonClass} mt-6 inline-block rounded-xl px-8 py-3 text-sm`}
                   >
-                    Browse Products
+                    Start splurging
                   </Link>
                 </div>
               ) : (

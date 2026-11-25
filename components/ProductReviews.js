@@ -54,8 +54,8 @@ export default function ProductReviews({ productId }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!rating) { setError("Please pick a star rating."); return; }
-    if (!text.trim()) { setError("Please write something."); return; }
+    if (!rating) { setError("Pick a star rating first."); return; }
+    if (!text.trim()) { setError("Write something first."); return; }
     setError("");
     setSubmitting(true);
 
@@ -89,7 +89,7 @@ export default function ProductReviews({ productId }) {
   return (
     <section className="mt-16">
       <h2 className="page-heading text-2xl">
-        Community Reviews
+        What people are saying
         {reviews.length > 0 && (
           <span className="ml-2 text-lg font-medium text-slate-400">
             ({reviews.length})
@@ -109,7 +109,7 @@ export default function ProductReviews({ productId }) {
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={3}
-            placeholder="Share your thoughts on this fictional product..."
+            placeholder="Say something about this thing that doesn't exist…"
             className={`${inputClass} mt-3 resize-none text-sm`}
           />
           {error && (
@@ -120,7 +120,7 @@ export default function ProductReviews({ productId }) {
             disabled={submitting}
             className={`${primaryButtonClass} mt-3 rounded-xl px-6 py-2.5 text-sm disabled:opacity-60`}
           >
-            {submitting ? "Posting…" : "Post Review"}
+            {submitting ? "Posting…" : "Post review"}
           </button>
         </form>
       )}
@@ -145,7 +145,7 @@ export default function ProductReviews({ productId }) {
           <div className="rounded-2xl bg-white py-12 text-center shadow-md shadow-purple-100/50">
             <span className="text-4xl">💬</span>
             <p className="mt-3 font-bold text-navy">No reviews yet</p>
-            <p className="mt-1 text-sm text-slate-500">Be the first to review this product!</p>
+            <p className="mt-1 text-sm text-slate-500">Be the first to review something that doesn&apos;t exist.</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

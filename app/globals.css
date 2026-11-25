@@ -248,6 +248,22 @@ body {
 .dk .hover\:bg-pink-50:hover { background-color: #241a40; }
 .dk .bg-red-50 { background-color: rgba(239, 68, 68, 0.14); }
 .dk .bg-amber-50 { background-color: rgba(245, 158, 11, 0.14); }
+.dk .bg-gray-50,
+.dk .bg-slate-50,
+.dk .bg-purple-50\/50 { background-color: #1c1433; }
+.dk .bg-slate-100 { background-color: #241a40; }
+.dk .bg-white\/90 { background-color: rgba(23, 16, 42, 0.9); }
+.dk .hover\:bg-white:hover,
+.dk .hover\:bg-slate-50:hover { background-color: #241a40; }
+.dk .hover\:bg-red-50:hover { background-color: rgba(239, 68, 68, 0.2); }
+.dk .border-slate-200,
+.dk .border-red-200,
+.dk .border-amber-200 { border-color: #2d2347; }
+.dk .hover\:border-slate-400:hover,
+.dk .hover\:border-purple-400:hover,
+.dk .border-purple-600 { border-color: #c6ff4a; }
+.dk .text-purple-600 { color: #c6ff4a; }
+.dk .hover\:text-\[\#EC4899\]:hover { color: #ff5fb0; }
 
 /* text */
 .dk .text-navy { color: #f5f1ff; }

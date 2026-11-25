@@ -20,12 +20,12 @@ export default function SignupPage() {
     setError("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError("Passwords don't match.");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setError("Password needs at least 6 characters.");
       return;
     }
 
@@ -81,7 +81,7 @@ export default function SignupPage() {
         <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-md shadow-purple-100/50">
           <h1 className="page-heading text-center text-3xl">Join Splurgie</h1>
           <p className="mt-2 text-center text-sm text-slate-500">
-            Create your account and start shopping fictional products
+            Make an account. List things. Buy things. Spend $0.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">

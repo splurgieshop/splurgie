@@ -78,7 +78,7 @@ export default function ProductCard({ product }) {
           onClick={() => addToCart(product.id)}
           className={`${primaryButtonClass} mt-4 w-full rounded-xl py-2.5 text-sm`}
         >
-          Add to Cart
+          Add to cart
         </button>
       </div>
     </article>

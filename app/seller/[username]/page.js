@@ -27,7 +27,7 @@ export default async function SellerPage({ params }) {
           <span className="text-5xl">🔍</span>
           <h1 className="page-heading mt-4 text-3xl">@{username} not found</h1>
           <p className="mt-2 text-slate-500">
-            This seller hasn&apos;t listed anything yet — or doesn&apos;t exist.
+            Nothing here. This seller hasn&apos;t listed anything, or doesn&apos;t exist.
           </p>
           <Link
             href="/products"
@@ -52,7 +52,7 @@ export default async function SellerPage({ params }) {
             </div>
             <div className="flex-1 text-center sm:text-left">
               <h1 className="page-heading text-3xl">@{username}</h1>
-              <p className="mt-1 text-slate-500">Splurgie seller</p>
+              <p className="mt-1 text-slate-500">Splurgie creator</p>
               <div className="mt-4 flex justify-center gap-8 sm:justify-start">
                 <div className="text-center">
                   <p className="text-2xl font-extrabold text-primary">{products.length}</p>
@@ -60,7 +60,7 @@ export default async function SellerPage({ params }) {
                 </div>
                 <div className="text-center">
                   <p className="text-2xl font-extrabold text-primary">{totalSold}</p>
-                  <p className="text-sm text-slate-500">Total Sold</p>
+                  <p className="text-sm text-slate-500">Total sold</p>
                 </div>
               </div>
             </div>
@@ -69,7 +69,7 @@ export default async function SellerPage({ params }) {
 
         {/* Listings */}
         <div className="mt-10">
-          <h2 className="page-heading text-2xl">All Listings</h2>
+          <h2 className="page-heading text-2xl">Everything they made up</h2>
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />

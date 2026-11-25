@@ -3,7 +3,7 @@ import DashboardContent from "@/components/DashboardContent";
 
 export const metadata = {
   title: "Seller Dashboard — Splurgie",
-  description: "Track your sales, revenue, and top products on Splurgie.",
+  description: "Your sales, revenue and best-selling nonsense.",
 };
 
 export default function DashboardPage() {

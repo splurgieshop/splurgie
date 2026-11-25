@@ -20,7 +20,7 @@ export default function ContactPage() {
     e.preventDefault();
     setError("");
     if (!form.message.trim()) {
-      setError("Please write a message before sending.");
+      setError("Write a message first.");
       return;
     }
     setSubmitting(true);
@@ -54,7 +54,7 @@ export default function ContactPage() {
           {submitted ? (
             <div className="py-8 text-center">
               <span className="text-5xl">💌</span>
-              <h1 className="page-heading mt-4 text-2xl">Thanks for reaching out!</h1>
+              <h1 className="page-heading mt-4 text-2xl">Message received. Thanks!</h1>
               <p className="mt-3 text-slate-500">
                 We've received your message and will get back to you soon.
               </p>
@@ -62,17 +62,17 @@ export default function ContactPage() {
                 href="/products"
                 className={`${primaryButtonClass} mt-8 inline-block rounded-xl px-8 py-3 text-sm`}
               >
-                Back to Shopping
+                Back to the nonsense
               </Link>
             </div>
           ) : (
             <>
               <div className="mb-8 text-center">
                 <span className="text-4xl">✉️</span>
-                <h1 className="page-heading mt-3 text-2xl">Contact & Feedback</h1>
+                <h1 className="page-heading mt-3 text-2xl">Talk to us</h1>
                 <p className="mt-2 text-slate-500">
-                  Have a suggestion, found a bug, or just want to say hi? We'd
-                  love to hear from you.
+                  Got an idea, found a bug, or just want to say hi? We read
+                  every message.
                 </p>
               </div>
 
@@ -124,7 +124,7 @@ export default function ContactPage() {
                     rows={5}
                     value={form.message}
                     onChange={handleChange}
-                    placeholder="Tell us what's on your mind — feedback, ideas, bug reports, or just a hello..."
+                    placeholder="Feedback, ideas, bug reports, or just a hello…"
                     className={`${inputClass} resize-none`}
                   />
                 </div>

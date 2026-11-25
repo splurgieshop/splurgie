@@ -12,7 +12,7 @@ function LoadingSpinner() {
     <div className="flex flex-col items-center justify-center py-20">
       <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
       <p className="mt-4 text-sm font-medium text-slate-500">
-        Loading products...
+        Loading the nonsense…
       </p>
     </div>
   );
@@ -23,13 +23,13 @@ function EmptyState() {
     <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 py-20 text-center">
       <span className="text-5xl">✨</span>
       <p className="page-heading mt-4 text-xl">
-        No products yet — be the first to create one!
+        No products yet. Be the first to make something up.
       </p>
       <Link
         href="/create-product"
         className={`${primaryButtonClass} mt-6 inline-block rounded-xl px-8 py-3 text-sm`}
       >
-        Create a Product
+        List your nonsense
       </Link>
     </div>
   );
@@ -46,7 +46,7 @@ export default function ProductsPageContent() {
         const data = await fetchAllProducts();
         setProducts(data);
       } catch (err) {
-        setError(err.message || "Failed to load products.");
+        setError(err.message || "Couldn't load the products. Refresh and try again.");
       } finally {
         setLoading(false);
       }

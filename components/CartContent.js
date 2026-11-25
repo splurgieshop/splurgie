@@ -62,15 +62,15 @@ export default function CartContent() {
     return (
       <div className="rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 py-20 text-center">
         <span className="text-6xl">🛒</span>
-        <h2 className="page-heading mt-4 text-2xl">Your cart is empty</h2>
+        <h2 className="page-heading mt-4 text-2xl">Your cart is empty. Fix that.</h2>
         <p className="mt-2 text-slate-500">
-          Time to splurge on something that doesn&apos;t exist!
+          Go find something that doesn&apos;t exist.
         </p>
         <Link
           href="/products"
           className={`${primaryButtonClass} mt-6 inline-block rounded-xl px-8 py-3 text-sm`}
         >
-          Browse Products
+          Start splurging
         </Link>
       </div>
     );
@@ -170,7 +170,7 @@ export default function CartContent() {
             onClick={() => router.push("/checkout")}
             className={`${primaryButtonClass} mt-6 w-full rounded-xl py-3 text-sm`}
           >
-            Proceed to Checkout
+            Check out (for free)
           </button>
         </div>
       </div>

@@ -109,7 +109,7 @@ export default function CheckoutForm() {
     <form onSubmit={handlePlaceOrder} className="grid gap-8 lg:grid-cols-3" aria-busy={submitting}>
       <div className="space-y-8 lg:col-span-2">
         <section className="rounded-2xl bg-white p-6 shadow-md shadow-purple-100/50">
-          <h2 className="page-heading text-lg">Shipping Details</h2>
+          <h2 className="page-heading text-lg">Where to (not) ship it</h2>
           <div className="mt-4 space-y-4">
             <div>
               <label
@@ -185,9 +185,9 @@ export default function CheckoutForm() {
         </section>
 
         <section className="rounded-2xl bg-white p-6 shadow-md shadow-purple-100/50">
-          <h2 className="page-heading text-lg">Payment Details</h2>
+          <h2 className="page-heading text-lg">Payment (pretend)</h2>
           <p className="mt-1 text-xs font-medium text-slate-400">
-            Any input works — this is all pretend 💜
+            Type anything. Nothing is charged. Ever. 💜
           </p>
           <div className="mt-4 space-y-4">
             <div>

@@ -170,7 +170,7 @@ export default function EditProductPage() {
           ← Back to profile
         </Link>
         <h1 className="page-heading text-3xl sm:text-4xl">Edit Listing</h1>
-        <p className="mt-2 text-slate-500">Update your fictional product</p>
+        <p className="mt-2 text-slate-500">Tweak your nonsense</p>
 
         <form
           onSubmit={handleSubmit}

@@ -251,7 +251,7 @@ export default function DashboardContent() {
 
         {notifications.length === 0 ? (
           <div className="flex h-32 items-center justify-center rounded-xl bg-purple-50 text-sm text-slate-400">
-            No sales yet — share your listings to get started!
+            No sales yet. Share your listings and wait.
           </div>
         ) : (
           <div className="flex items-end gap-2" style={{ height: 120 }}>
@@ -270,7 +270,7 @@ export default function DashboardContent() {
                       height: barH,
                       background: isMax
                         ? "linear-gradient(to top, #7C3AED, #EC4899)"
-                        : "#ede9fe",
+                        : "rgba(167, 139, 250, 0.25)",
                     }}
                   />
                   <span className="text-[10px] font-semibold text-slate-400">
@@ -297,7 +297,7 @@ export default function DashboardContent() {
                 href="/create-product"
                 className="mt-2 inline-block text-sm font-bold text-primary hover:underline"
               >
-                Create your first product →
+                List your first product →
               </Link>
             </div>
           ) : (

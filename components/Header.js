@@ -76,7 +76,7 @@ export default function Header({ variant }) {
           </svg>
           <input
             type="search"
-            placeholder="Search fictional products..."
+            placeholder="Search the nonsense…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleSearch}

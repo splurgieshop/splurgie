@@ -41,7 +41,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-md shadow-purple-100/50">
           <h1 className="page-heading text-center text-3xl">Welcome back</h1>
           <p className="mt-2 text-center text-sm text-slate-500">
-            Sign in to your Splurgie account
+            Sign in to pick up where you left off
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
