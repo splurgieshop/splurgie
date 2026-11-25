@@ -1,76 +1,75 @@
-import Header from "@/components/Header";
-import FeaturedProducts from "@/components/FeaturedProducts";
-import HeroSearch from "@/components/HeroSearch";
-import HeroMosaic from "@/components/HeroMosaic";
-import CategoriesBar from "@/components/CategoriesBar";
 import Link from "next/link";
+import Header from "@/components/Header";
+import HeroCheckout from "@/components/home/HeroCheckout";
+import Marquee from "@/components/home/Marquee";
+import TrendingNonsense from "@/components/home/TrendingNonsense";
+import TopCreators from "@/components/home/TopCreators";
 
 export default function Home() {
   return (
     <>
-      <Header />
+      <Header variant="dark" />
 
-      {/* ── HERO ── */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #7C3AED 0%, #a855f7 50%, #EC4899 100%)",
-          minHeight: "360px",
-        }}
-      >
-        {/* Real product image mosaic behind the text */}
-        <HeroMosaic />
-
-        {/* Hero content */}
-        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-24 text-center sm:px-6 lg:px-8">
-          <div className="mx-auto w-full max-w-2xl">
-            <h1 className="text-5xl font-bold leading-tight text-white sm:text-6xl">
-              Shop things that<br className="hidden sm:block" /> don&apos;t exist. Yet.
+      <main className="hm">
+        {/* ── HERO ── */}
+        <div className="hm-wrap hm-hero">
+          <div>
+            <h1>
+              Retail therapy. <em>Zero</em> <i>regrets.</i>
             </h1>
-            <p className="mt-4 text-xl text-white/80">
-              100% fictional · 100% fun
+            <p className="hm-sub">
+              Splurgie is a fake store with a checkout that hits for real. Buy
+              ridiculous things for $0 and get a tracking number for a package
+              that will never arrive.
             </p>
-            <div className="mt-8">
-              <HeroSearch />
+            <div className="hm-cta">
+              <Link href="/products" className="hm-btn hm-b1">
+                Start splurging
+              </Link>
+              <Link href="/create-product" className="hm-btn hm-b2">
+                Sell your nonsense
+              </Link>
             </div>
-            <Link
-              href="/products"
-              className="mt-4 inline-block text-sm font-semibold text-white/70 transition hover:text-white"
-            >
-              or browse all products →
-            </Link>
+            <p className="hm-note">
+              No card. No account to browse. Nothing ships. Ever.
+            </p>
           </div>
+
+          <HeroCheckout />
         </div>
-      </section>
 
-      {/* ── CATEGORIES ── */}
-      <CategoriesBar />
+        <Marquee />
 
-      {/* ── TRENDING PRODUCTS ── */}
-      <section className="bg-gradient-to-b from-purple-50/50 to-white py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between">
-            <div>
-              <h2 className="page-heading text-3xl sm:text-4xl">
-                Trending Now
-              </h2>
-              <p className="mt-2 text-slate-500">
-                The hottest fictional finds this week
-              </p>
+        {/* ── TRENDING ── */}
+        <TrendingNonsense />
+
+        {/* ── SELL + CREATORS ── */}
+        <section className="hm-sec" style={{ paddingTop: 0 }}>
+          <div className="hm-wrap">
+            <div className="hm-sell">
+              <div>
+                <h2>Got a dumb idea? Perfect.</h2>
+                <p>
+                  List it in 60 seconds. Strangers will &ldquo;buy&rdquo; it and
+                  you&apos;ll get a ping every time.
+                </p>
+                <Link href="/create-product" className="hm-btn">
+                  Start selling
+                </Link>
+              </div>
+              <div className="hm-stk" aria-hidden="true">
+                <span>Sock Locator</span>
+                <span>CEO Cardigan</span>
+                <span>Crashout Journal</span>
+                <span>Delulu Glasses</span>
+                <span>yours?</span>
+              </div>
             </div>
-            <Link
-              href="/products"
-              className="text-sm font-bold text-primary hover:text-accent"
-            >
-              View all →
-            </Link>
+
+            <TopCreators />
           </div>
-          <div className="mt-10">
-            <FeaturedProducts />
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </>
   );
 }

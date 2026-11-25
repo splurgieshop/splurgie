@@ -2,6 +2,7 @@ import { Nunito } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import Footer from "@/components/Footer";
+import ThemeShell from "@/components/ThemeShell";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -23,7 +24,7 @@ export default function RootLayout({ children }) {
       <body className="flex min-h-full flex-col bg-white font-sans text-navy">
         <AuthProvider>
           <CartProvider>
-            <div className="flex flex-1 flex-col">{children}</div>
+            <ThemeShell>{children}</ThemeShell>
             <Footer />
           </CartProvider>
         </AuthProvider>

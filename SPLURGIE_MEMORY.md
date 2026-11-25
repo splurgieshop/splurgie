@@ -30,13 +30,13 @@ git config --global user.name "splurgieshop"
 **NEVER use `git push` to deploy** (Vercel Hobby plan blocks auto-deploy from public repos unless using CLI).  
 Always deploy with:
 ```bash
-cd /Users/melvinandnatalie/splurgie && vercel --prod
+cd /Users/melvinheng/splurgie && vercel --prod
 ```
 Vercel CLI is installed globally (`sudo npm install -g vercel`). Already linked and authenticated.
 
 ### Local dev
 ```bash
-cd /Users/melvinandnatalie/splurgie && npm run dev
+cd /Users/melvinheng/splurgie && npm run dev
 ```
 Runs on http://localhost:3000 with Turbopack.
 
@@ -62,7 +62,7 @@ Runs on http://localhost:3000 with Turbopack.
 ---
 
 ## Credentials & Secrets
-> Actual secrets live in `/Users/melvinandnatalie/splurgie/.env.local` (gitignored — never committed).  
+> Actual secrets live in `/Users/melvinheng/splurgie/.env.local` (gitignored — never committed).  
 > The file contains: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
 ---
@@ -176,7 +176,7 @@ RLS: users SELECT/UPDATE own rows; INSERT open (so checkout can notify sellers).
 
 | Route | File | Description |
 |-------|------|-------------|
-| `/` | `app/page.js` | Homepage: full-width mosaic hero (real product images via HeroMosaic.js), HeroSearch, CategoriesBar, Trending Now section |
+| `/` | `app/page.js` | Homepage (dark "Receipt" theme, redesigned 2026-08): hero with live fake-checkout demo on a random real product, product-name marquee, "Trending nonsense" grid + "See all nonsense" button, "Got a dumb idea?" sell banner, Top creators strip |
 | `/products` | `app/products/page.js` | All products with compact dropdown filter bar (category, price, sort, search) |
 | `/products/[slug]` | `app/products/[slug]/page.js` | Product detail page — fetches by slug with UUID fallback; redirects old UUID URLs to slug URL |
 | `/seller/[username]` | `app/seller/[username]/page.js` | Public seller profile — all listings + stats |
@@ -228,7 +228,13 @@ Each client-component page has a companion `layout.js` in its directory exportin
 | `ShareButton.js` | Share button on product pages — mobile: native OS sheet; desktop: dropdown with Copy Link, WhatsApp, Telegram, X, Facebook |
 | `DashboardContent.js` | Seller dashboard: Revenue, Sales, Listings, Avg Rating stats; Sales Over Time chart (7d/30d/90d); Top Products by revenue; Category breakdown |
 | `ReportButton.js` | "Report Listing" button on product detail pages. Opens modal with reason dropdown + optional note. Requires login. Inserts into `reports` table AND sends seller a notification via `notifications` table. |
-| `HeroMosaic.js` | Client component used in homepage hero. Fetches top 30 products by sold_count, renders their real images (or gradient fallbacks) as a tiled mosaic grid at 22% opacity behind the hero text. |
+| `home/HeroCheckout.js` | Homepage hero card: fetches up to 60 products from Supabase, shows a random one, "Buy it (for free)" runs a 3-step fake checkout and shows a random order # and `SPG`+10-digit tracking #. Demo only — does NOT write an order or change sold_count. "Show me something else" re-rolls. |
+| `home/Marquee.js` | Scrolling strip of the top 10 products by sold_count (hidden if fewer than 3 products). |
+| `home/TrendingNonsense.js` | "Trending nonsense" dark product grid (top 6 by sold_count) + "See all nonsense →" button to `/products`. |
+| `home/TopCreators.js` | Top 3 sellers ranked by total sold_count across their listings (all-time, not weekly). Links to `/seller/[username]`. Hidden if no data. |
+| `Header.js` | Takes `variant="light"` (default) or `variant="dark"` (used only on the homepage). |
+| *Unused since homepage redesign* | `HeroMosaic.js`, `HeroSearch.js`, `CategoriesBar.js`, `FeaturedProducts.js` — kept in repo, no longer imported by the homepage. |
+| `HeroMosaic.js` (legacy) | Client component formerly used in homepage hero. Fetches top 30 products by sold_count, renders their real images (or gradient fallbacks) as a tiled mosaic grid at 22% opacity behind the hero text. |
 
 ---
 
@@ -310,11 +316,16 @@ Each client-component page has a companion `layout.js` in its directory exportin
 - Header: Logo, search, Shop, About, @username (→ profile), Sign Out, notification bell, Cart with count badge
 - About page at `/about`
 
-### Homepage
-- **Full-width mosaic hero**: purple-to-pink gradient with real product images tiled as background at 22% opacity (`HeroMosaic.js`). Headline: "Shop things that don't exist. Yet." + HeroSearch + "or browse all products →"
-- CategoriesBar: 10 category pill icons below hero
-- Trending Now section (6 products sorted by `sold_count DESC`)
-- "Why Splurgie?" feature cards removed (cluttered the page, delayed product discovery)
+### Homepage (redesigned — dark "Receipt" theme)
+Why: Vercel analytics (30 days) showed 25 visitors, 156 page views, 68% bounce. Old homepage was a gradient hero + category row + 6 products, with no demo of the core mechanic.
+- Hero: "Retail therapy. Zero regrets." + "Start splurging" / "Sell your nonsense" CTAs + live fake-checkout card (`HeroCheckout.js`) on a random real product
+- Marquee strip of top product names
+- "Trending nonsense" (6 products by `sold_count DESC`) + "See all nonsense →" → `/products`
+- "Got a dumb idea? Perfect." lime sell banner → `/create-product`
+- "Top creators" (top 3 sellers by total sold) under the sell banner
+- Removed from homepage: "how it works" steps, categories bar, hero search bar (header search still exists on desktop), FAQ (About page still has FAQ)
+- **Dark theme on inner pages**: `components/ThemeShell.js` (in `app/layout.js`) adds class `dk` on every route except those in `lib/theme.js` (`/auth`, `/profile`, `/dashboard`, `/create-product`, `/edit-product` stay light for now). The `.dk` block at the bottom of `globals.css` remaps existing Tailwind utilities (bg-white, text-navy, text-primary → lime, purple borders, primary gradient buttons → lime) so components don't need rewriting. `Header.js` picks dark/light from the route. Footer is dark everywhere. To theme a remaining page, remove it from `LIGHT_ROUTE_PREFIXES`.
+- Styles live in `app/globals.css` under the `.hm-*` prefix (scoped to `<main className="hm">`). Colors: bg `#0d0817`, lime `#c6ff4a`, pink `#ff5fb0`, violet `#a78bfa`. Footer is still the global purple one.
 
 ### Infinite Scroll
 - `ProductsGrid.js` loads 20 products at a time (`PAGE_SIZE = 20`)
@@ -404,9 +415,11 @@ Vercel Analytics integrated: `@vercel/analytics/next` installed, `<Analytics />`
 ## Still To Build / Nice To Have
 1. **Profile photo upload** — users currently show initials avatar only
 2. **Custom 404 page** — currently shows Next.js default
-3. **Leaderboard** — top sellers / most-sold products ranking page
-4. **Homepage social proof** — real live stats (product count, total sold) fetched from Supabase
-5. **Product description quality** — fix any descriptions with no space after periods: `UPDATE products SET description = regexp_replace(description, '\.([A-Z])', '. \1', 'g') WHERE description ~ '\.([A-Z])'`
+3. **Leaderboard** — full ranking page (homepage has an all-time Top 3 creators strip; "this week" ranking needs per-order timestamps per seller)
+4. **Homepage social proof** — real live stats (product count, total sold) and a recent-purchases ticker from Supabase, only once numbers are meaningful
+5. **Homepage FAQ / GEO content** — compact FAQ was dropped in the redesign; consider re-adding
+6. **Product page "Buy" copy** — homepage says "Buy it free" and links to the product page
+7. **Product description quality** — fix any descriptions with no space after periods: `UPDATE products SET description = regexp_replace(description, '\.([A-Z])', '. \1', 'g') WHERE description ~ '\.([A-Z])'`
 
 ---
 
@@ -423,14 +436,16 @@ Vercel Analytics integrated: `@vercel/analytics/next` installed, `<Analytics />`
 ---
 
 ## Important Known Issues / Rules
-- **Never commit from Claude's bash sandbox** — creates `HEAD.lock` files. If this happens: `rm /Users/melvinandnatalie/splurgie/.git/HEAD.lock`
+- **Never commit from Claude's bash sandbox** — creates `HEAD.lock` files. If this happens: `rm /Users/melvinheng/splurgie/.git/HEAD.lock`
 - **Vercel auto-deploy is disabled** — always use `vercel --prod` from the user's Cursor terminal
 - **useSearchParams() requires Suspense** — any page using it needs `<Suspense>` in the parent `page.js`
 - **Supabase free tier**: 4 confirmation emails/hour — check spam for verification emails
 - **Switching computers**: clone repo, run `npm install`, copy `.env.local` (AirDrop or `cat ~/.env.local`), set git config below, run `vercel link`
+- **Working computer as of 2026-08-01: MacBook Air (`melvinheng@Melvins-MacBook-Air`), project at `/Users/melvinheng/splurgie`.** Previously the iMac at `/Users/melvinandnatalie/splurgie`.
 - **MacBook setup**: `git config --global user.email "splurgie.shop@gmail.com" && git config --global user.name "splurgieshop"` — then `vercel link` in the splurgie folder to reconnect Vercel CLI
+- **Note**: the first commit on this MacBook (2026-08-01) used the auto-detected identity `melvinheng@Melvins-MacBook-Air.local` instead of `splurgie.shop@gmail.com` — run the git config command above so future commits use the correct identity, or amend with `git commit --amend --reset-author` if it matters.
 
 ---
 
-*Last updated: 2026-08-01*  
+*Last updated: 2026-08-01 (working computer switched to MacBook Air; homepage redesigned to dark "Receipt" theme)*  
 *Update this file whenever a new feature, design change, DB table, or capability is added.*

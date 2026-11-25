@@ -63,7 +63,8 @@ body {
 }
 
 .gradient-footer {
-  background: linear-gradient(180deg, #5b21b6 0%, #4c1d95 100%);
+  background: #0d0817;
+  border-top: 2px solid #2d2347;
 }
 
 .page-heading {
@@ -85,4 +86,226 @@ body {
 .input-field:focus {
   border-color: #7c3aed;
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+/* ───────────── Homepage (dark "Receipt" theme) ───────────── */
+.hm {
+  --hm-bg: #0d0817;
+  --hm-bg2: #17102a;
+  --hm-lime: #c6ff4a;
+  --hm-pink: #ff5fb0;
+  --hm-vio: #a78bfa;
+  --hm-tx: #f5f1ff;
+  --hm-mute: #b7aed3;
+  --hm-line: #2d2347;
+  flex: 1;
+  background: var(--hm-bg);
+  color: var(--hm-tx);
+  line-height: 1.5;
+}
+.hm a { color: inherit; text-decoration: none; }
+.hm :focus-visible { outline: 3px solid var(--hm-lime); outline-offset: 3px; border-radius: 6px; }
+.hm-wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.hm-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 50px; padding: 0 26px; border-radius: 14px;
+  font-weight: 800; font-size: 16px; border: 2px solid var(--hm-lime);
+  cursor: pointer; font-family: inherit; transition: transform 0.12s;
+}
+.hm-btn:hover { transform: translate(-2px, -2px); }
+.hm-b1 { background: var(--hm-lime); color: #111 !important; box-shadow: 4px 4px 0 var(--hm-pink); }
+.hm-b2 { background: transparent; color: var(--hm-lime) !important; }
+.hm-sm { min-height: 40px; padding: 0 16px; font-size: 14px; box-shadow: none; }
+.hm-hero { padding: 46px 20px 70px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: center; }
+.hm h1 { font-size: clamp(42px, 7.4vw, 84px); line-height: 0.95; margin: 0 0 20px; font-weight: 900; letter-spacing: -0.04em; text-transform: uppercase; }
+.hm h1 em { font-style: normal; color: var(--hm-lime); }
+.hm h1 i { font-style: normal; color: var(--hm-pink); }
+.hm-sub { font-size: 19px; color: var(--hm-mute); max-width: 30em; margin: 0 0 28px; }
+.hm-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+.hm-note { margin-top: 16px; font-size: 13px; color: var(--hm-mute); }
+
+/* bell icon inside the dark header */
+.hm-bell > div > button { border-color: #2d2347; }
+.hm-bell > div > button:hover { background: #17102a; }
+.hm-bell > div > button > svg { color: #ffffff; }
+
+/* checkout demo */
+.hm-demo { background: #fffdf5; color: #17102a; border-radius: 24px; padding: 22px; box-shadow: 8px 8px 0 var(--hm-pink); max-width: 440px; width: 100%; margin-inline: auto; }
+.hm-dh { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.04em; color: #5b5578; margin-bottom: 14px; }
+.hm-pill { background: #17102a; color: var(--hm-lime); border-radius: 999px; padding: 3px 10px; font-size: 11px; }
+.hm-prod { display: flex; gap: 14px; align-items: center; min-height: 100px; }
+.hm-thumb { width: 96px; height: 96px; border-radius: 18px; overflow: hidden; flex-shrink: 0; }
+.hm-prod h2 { font-size: 20px; line-height: 1.2; margin: 0; font-weight: 800; }
+.hm-prod p { margin: 3px 0 0; color: #5b5578; font-size: 13px; }
+.hm-price { margin-top: 6px; font-weight: 900; font-size: 21px; }
+.hm-price s { color: #7b7596; font-weight: 500; font-size: 14px; margin-right: 8px; }
+.hm-price span { color: #047857; }
+.hm-demo .hm-btn { width: 100%; margin-top: 16px; }
+.hm-demo .hm-b1 { background: #17102a; color: var(--hm-lime) !important; border-color: #17102a; box-shadow: 4px 4px 0 var(--hm-lime); }
+.hm-shuf { display: block; margin: 12px auto 0; background: none; border: 0; color: #5b5578; font-size: 13px; font-weight: 700; text-decoration: underline; cursor: pointer; font-family: inherit; min-height: 32px; }
+.hm-steps { list-style: none; padding: 0; margin: 16px 0 0; font-size: 14px; }
+.hm-steps li { display: flex; align-items: center; gap: 10px; padding: 6px 0; color: #8b86a8; }
+.hm-steps li.on { color: #17102a; font-weight: 700; }
+.hm-steps li::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid #cfc9e6; flex-shrink: 0; }
+.hm-steps li.on::before { background: #10b981; border-color: #10b981; }
+.hm-rc { margin-top: 14px; border: 2px dashed #9a92c4; border-radius: 14px; padding: 14px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; }
+.hm-ln { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; }
+.hm-fin { margin-top: 8px; font-weight: 800; color: #be123c; text-align: center; }
+.hm-row2 { display: flex; gap: 10px; margin-top: 14px; }
+.hm-row2 .hm-btn { margin: 0; min-height: 44px; font-size: 14px; flex: 1; }
+.hm-row2 .hm-b2 { color: #17102a !important; border-color: #17102a; }
+.hm-skel { height: 100px; border-radius: 18px; background: #ece8f7; animation: hm-pulse 1.4s ease-in-out infinite; }
+@keyframes hm-pulse { 50% { opacity: 0.5; } }
+
+/* marquee */
+.hm-strip { border-block: 2px solid var(--hm-line); background: var(--hm-bg2); overflow: hidden; padding: 16px 0; font-weight: 900; font-size: 22px; text-transform: uppercase; letter-spacing: -0.01em; }
+.hm-track { display: flex; gap: 34px; width: max-content; white-space: nowrap; animation: hm-m 34s linear infinite; }
+.hm-track span:nth-child(even) { color: var(--hm-lime); }
+@keyframes hm-m { to { transform: translateX(-50%); } }
+
+/* sections */
+.hm-sec { padding: 76px 0; }
+.hm h2.hm-t { font-size: clamp(30px, 5vw, 52px); line-height: 1; margin: 0 0 12px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.03em; }
+.hm-lead { color: var(--hm-mute); font-size: 18px; margin: 0 0 36px; max-width: 36em; }
+.hm-pg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.hm-p { background: var(--hm-bg2); border: 2px solid var(--hm-line); border-radius: 22px; padding: 18px; transition: transform 0.15s, border-color 0.15s; display: flex; flex-direction: column; }
+.hm-p:hover { transform: rotate(-1deg) translateY(-4px); border-color: var(--hm-lime); }
+.hm-im { height: 170px; border-radius: 14px; overflow: hidden; margin-bottom: 14px; display: block; }
+.hm-p h3 { margin: 0; font-size: 18px; font-weight: 800; }
+.hm-m { display: flex; justify-content: space-between; align-items: center; margin: 6px 0 14px; color: var(--hm-mute); font-size: 14px; gap: 8px; }
+.hm-m s { color: var(--hm-mute); }
+.hm-m b { color: var(--hm-lime); font-size: 17px; }
+.hm-p .hm-btn { width: 100%; min-height: 44px; font-size: 14px; box-shadow: none; margin-top: auto; }
+.hm-more { text-align: center; margin-top: 36px; }
+.hm-more .hm-btn { min-height: 56px; padding: 0 36px; font-size: 18px; }
+.hm-more small { display: block; margin-top: 12px; color: var(--hm-mute); font-size: 14px; }
+.hm-empty { text-align: center; color: var(--hm-mute); padding: 40px 0; }
+
+/* sell + creators */
+.hm-sell { background: var(--hm-lime); color: #111; border-radius: 30px; padding: 54px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 30px; align-items: center; }
+.hm-sell h2 { font-size: clamp(32px, 5vw, 56px); line-height: 0.98; margin: 0 0 14px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.03em; }
+.hm-sell p { margin: 0 0 22px; font-size: 18px; }
+.hm-sell .hm-btn { background: #111; color: var(--hm-lime) !important; border-color: #111; box-shadow: 4px 4px 0 var(--hm-pink); }
+.hm-stk { display: flex; flex-wrap: wrap; gap: 10px; }
+.hm-stk span { background: #111; color: var(--hm-lime); border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: 14px; transform: rotate(-2deg); }
+.hm-stk span:nth-child(even) { background: var(--hm-pink); color: #111; transform: rotate(2deg); }
+.hm-cr-wrap { padding-top: 56px; }
+.hm-cr-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.hm-cr-head h2 { margin: 0; font-size: clamp(26px, 4vw, 40px); font-weight: 900; text-transform: uppercase; letter-spacing: -0.03em; line-height: 1; }
+.hm-cr-head p { margin: 6px 0 0; color: var(--hm-mute); }
+.hm-cr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; list-style: none; margin: 0; padding: 0; }
+.hm-cr li { background: var(--hm-bg2); border: 2px solid var(--hm-line); border-radius: 20px; }
+.hm-cr li a { padding: 20px; display: flex; gap: 14px; align-items: center; border-radius: 20px; }
+.hm-cr li:hover { border-color: var(--hm-lime); }
+.hm-rk { width: 50px; height: 50px; border-radius: 14px; background: var(--hm-lime); color: #111; font-weight: 900; font-size: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hm-cr li:nth-child(2) .hm-rk { background: var(--hm-pink); }
+.hm-cr li:nth-child(3) .hm-rk { background: var(--hm-vio); }
+.hm-cr b { display: block; font-size: 17px; }
+.hm-cr span.hm-sm2 { font-size: 13px; color: var(--hm-mute); }
+.hm-link { color: var(--hm-lime) !important; font-weight: 800; font-size: 15px; text-decoration: underline !important; text-underline-offset: 4px; }
+
+@media (max-width: 900px) {
+  .hm-hero, .hm-sell { grid-template-columns: 1fr; }
+  .hm-pg { grid-template-columns: 1fr 1fr; }
+  .hm-cr { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .hm-pg { grid-template-columns: 1fr; }
+  .hm-sell { padding: 30px; }
+  .hm-sec { padding: 56px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hm-track { animation: none; }
+  .hm-btn, .hm-p { transition: none; }
+  .hm-p:hover { transform: none; }
+  .hm-skel { animation: none; }
+}
+
+/* ───────────── Dark skin for public inner pages ─────────────
+   Applied by ThemeShell (`.dk`) on every route except the private/auth ones
+   listed in lib/theme.js. Remaps the existing Tailwind utilities so those
+   pages match the homepage without rewriting each component. */
+.dk {
+  background: #0d0817;
+  color: #f5f1ff;
+  color-scheme: dark;
+}
+.dk .page-heading { color: #f5f1ff; }
+
+/* surfaces */
+.dk .bg-white { background-color: #17102a; }
+.dk .bg-white\/95 { background-color: rgba(23, 16, 42, 0.95); }
+.dk .bg-purple-50,
+.dk .bg-purple-50\/40 { background-color: #1c1433; }
+.dk .bg-purple-100 { background-color: rgba(198, 255, 74, 0.14); }
+.dk .from-purple-50 { --tw-gradient-from: #17102a; }
+.dk .from-purple-100 { --tw-gradient-from: #1c1433; }
+.dk .to-pink-50,
+.dk .to-pink-100 { --tw-gradient-to: #241338; }
+.dk .rounded-2xl.bg-white { border: 1px solid #2d2347; }
+.dk .hover\:bg-purple-50:hover,
+.dk .hover\:bg-purple-100:hover,
+.dk .hover\:bg-pink-50:hover { background-color: #241a40; }
+.dk .bg-red-50 { background-color: rgba(239, 68, 68, 0.14); }
+.dk .bg-amber-50 { background-color: rgba(245, 158, 11, 0.14); }
+
+/* text */
+.dk .text-navy { color: #f5f1ff; }
+.dk .text-slate-600,
+.dk .text-slate-500 { color: #b7aed3; }
+.dk .text-slate-400,
+.dk .hover\:text-slate-600:hover { color: #9a90bb; }
+.dk .text-primary,
+.dk .text-\[\#7C3AED\],
+.dk .hover\:text-primary:hover,
+.dk .group:hover .group-hover\:text-primary { color: #c6ff4a; }
+.dk .text-accent,
+.dk .hover\:text-accent:hover { color: #ff5fb0; }
+.dk .text-red-600,
+.dk .text-red-500,
+.dk .text-red-400,
+.dk .hover\:text-red-600:hover,
+.dk .hover\:text-red-500:hover { color: #fca5a5; }
+.dk .text-amber-800,
+.dk .text-amber-700 { color: #fcd34d; }
+.dk .text-green-600 { color: #86efac; }
+.dk .fill-accent { fill: #ff5fb0; }
+.dk .bg-clip-text.from-primary { --tw-gradient-from: #c6ff4a; --tw-gradient-to: #ff5fb0; }
+
+/* borders, rings, shadows */
+.dk .border-purple-50,
+.dk .border-purple-100,
+.dk .border-purple-200,
+.dk .border-gray-200 { border-color: #2d2347; }
+.dk .hover\:border-primary:hover,
+.dk .focus\:border-primary:focus,
+.dk .focus\:border-purple-500:focus,
+.dk .focus\:border-purple-600:focus { border-color: #c6ff4a; }
+.dk .hover\:border-accent:hover { border-color: #ff5fb0; }
+.dk .focus\:ring-purple-100:focus,
+.dk .focus\:ring-purple-200:focus { --tw-ring-color: rgba(198, 255, 74, 0.28); }
+.dk [class*="shadow-purple"] { --tw-shadow-color: rgba(0, 0, 0, 0.35); }
+
+/* form fields */
+.dk .input-field { background: #17102a; border-color: #2d2347; color: #f5f1ff; }
+.dk .input-field:focus { border-color: #c6ff4a; box-shadow: 0 0 0 3px rgba(198, 255, 74, 0.2); }
+.dk input::placeholder,
+.dk textarea::placeholder { color: #8f86ad; }
+
+/* primary buttons → lime, matching the homepage */
+.dk .bg-gradient-to-r.from-purple-600.to-pink-500,
+.dk a.bg-gradient-to-r.from-\[\#7C3AED\].to-\[\#EC4899\],
+.dk .bg-purple-600,
+.dk .bg-primary.text-white {
+  background-image: none;
+  background-color: #c6ff4a;
+  color: #111 !important;
+  box-shadow: 3px 3px 0 #ff5fb0;
+}
+.dk .hover\:bg-purple-700:hover { background-color: #d6ff7a; }
+
+/* About page hero stays a gradient, but a dark one */
+.dk section.bg-gradient-to-br.from-\[\#7C3AED\] {
+  --tw-gradient-from: #1c1433;
+  --tw-gradient-to: #3b1a52;
 }

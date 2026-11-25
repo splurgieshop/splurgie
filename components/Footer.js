@@ -4,15 +4,15 @@ export default function Footer() {
   return (
     <footer className="gradient-footer mt-auto py-12 text-white">
       <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-        <p className="text-2xl font-extrabold tracking-tight">
-          splurgie <span aria-hidden="true">✨</span>
+        <p className="text-2xl font-black tracking-tight">
+          splurgie<span className="text-[#c6ff4a]">.</span>
         </p>
-        <p className="mt-3 text-lg font-medium text-purple-200">
+        <p className="mt-3 text-lg font-medium text-[#b7aed3]">
           The joy of shopping. Reimagined.
         </p>
 
         {/* Links */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm font-semibold text-purple-200">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm font-semibold text-[#b7aed3]">
           <a
             href="https://instagram.com/splurgie.shop"
             target="_blank"
@@ -33,13 +33,13 @@ export default function Footer() {
         </div>
 
         {/* Disclaimer */}
-        <p className="mx-auto mt-8 max-w-xl text-xs leading-relaxed text-purple-300/70">
+        <p className="mx-auto mt-8 max-w-xl text-xs leading-relaxed text-[#b7aed3]/70">
           Splurgie is a simulated shopping platform. No real transactions occur.
           No real products are sold or delivered. All purchases are fictional
           and for entertainment purposes only.
         </p>
 
-        <p className="mt-4 text-xs text-purple-300/50">
+        <p className="mt-4 text-xs text-[#b7aed3]/50">
           © {new Date().getFullYear()} Splurgie. All rights reserved.
         </p>
       </div>
