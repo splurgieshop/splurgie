@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { useRouter, usePathname } from "next/navigation";
 import { isDarkRoute } from "@/lib/theme";
 import { useCart } from "@/context/CartContext";
@@ -129,6 +130,7 @@ export default function Header({ variant }) {
                 </Link>
                 <Link
                   href="/auth/signup"
+                  onClick={() => track("signup_click", { from: "header" })}
                   className={
                     dark
                       ? "rounded-xl border-2 border-[#c6ff4a] px-3 py-1.5 text-sm font-extrabold text-[#c6ff4a] transition hover:bg-[#c6ff4a] hover:text-[#111]"

@@ -457,5 +457,7 @@ Cheeky Gen Z: short, deadpan, a bit unhinged, never confusing. Examples live in 
 
 ---
 
-*Last updated: 2026-08-01 (working computer switched to MacBook Air; homepage redesigned to dark "Receipt" theme)*  
+**Analytics events (Vercel Analytics custom events via `track` from `@vercel/analytics`):** `demo_checkout_started` and `demo_checkout_completed` in `components/home/HeroCheckout.js`; `signup_click` (from: header) in `components/Header.js`. Share-click event not built yet.
+
+*Last updated: 2026-11-25 (custom analytics events added; marketing agent set up with Buffer; dark "Receipt" theme live)*  
 *Update this file whenever a new feature, design change, DB table, or capability is added.*

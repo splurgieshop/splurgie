@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { supabase } from "@/lib/supabase";
 import ProductImage from "@/components/ProductImage";
 import { formatPrice } from "@/lib/products";
@@ -65,6 +66,7 @@ export default function HeroCheckout() {
   }
 
   function buy() {
+    track("demo_checkout_started");
     setPhase("running");
     setStepsOn(0);
     STEPS.forEach((_, i) => {
@@ -74,6 +76,7 @@ export default function HeroCheckout() {
       setTimeout(() => {
         setReceipt({ order: `#${digits(8)}`, tracking: `SPG${digits(10)}` });
         setPhase("done");
+        track("demo_checkout_completed");
       }, 500 * STEPS.length + 500)
     );
   }
