@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 seed-products.sql
+
+# private marketing agent notes/reports (repo is public)
+/marketing-agent/
